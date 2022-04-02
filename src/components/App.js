@@ -3,13 +3,13 @@ import Web3 from 'web3'
 import './App.css';
 import Ako from '../abis/Ako.json'
 
+
 class App extends Component {
 
   async componentWillMount() {
     await this.loadWeb3()
     await this.loadBlockchainData()
   }
-
 
   async loadWeb3() {
     if (window.ethereum) {
@@ -41,11 +41,12 @@ class App extends Component {
       this.setState({ totalSupply })
       // Load Akos
       for (var i = 1; i <= totalSupply; i++) {
-        const ako = await contract.methods.ako(i - 1).call()
+        const ako = await contract.methods.akos(i - 1).call()
         this.setState({
           akos: [...this.state.akos, ako]
         })
       }
+      console.log(this.state.akos)
     } else {
       window.alert('Smart contract not deployed to detected network.')
     }
@@ -80,7 +81,7 @@ class App extends Component {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Ako Token
+            Ako Tokens
           </a>
           <ul className="navbar-nav px-3">
             <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
