@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
-contract NFT is ERC721URIStorage, Ownable, ERC721Enumerable {
+contract Ako is ERC721URIStorage, Ownable, ERC721Enumerable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
@@ -89,8 +89,9 @@ contract NFT is ERC721URIStorage, Ownable, ERC721Enumerable {
         require(ownerOf(_id)!=msg.sender, "you are token owner"); // 내 소유가 아니어야 한다
         uint _price = costOfTokens[_id];
         address tokenOwner = ownerOf(_id);
-        require(_price<=msg.value, "you need more budget"); // 자금이 부족하지 않아야 한다
-        payable(tokenOwner).transfer(msg.value);
+        require(_price*1000000000000000000<=msg.value, "you need more budget"); // 자금이 부족하지 않아야 한다
+        payable(tokenOwner).transfer(_price*1000000000000000000);
+        (bool refunded, ) = msg.sender.call{gas:0, value: msg.value - _price*1000000000000000000}("");
         _transfer(tokenOwner, msg.sender, _id);
         costOfTokens[_id] = 0;
     }

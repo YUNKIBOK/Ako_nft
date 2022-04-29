@@ -1,3 +1,5 @@
+const { assert } = require('chai')
+
 const Ako = artifacts.require('./Ako.sol')
 
 require('chai')
@@ -6,14 +8,16 @@ require('chai')
 
 contract('Ako', (accounts) => {
   let contract
+  let address
 
   before(async () => {
     contract = await Ako.deployed()
   })
 
   describe('deployment', async () => {
+
     it('deploys successfully', async () => {
-      const address = contract.address
+      address = contract.address
       assert.notEqual(address, 0x0)
       assert.notEqual(address, '')
       assert.notEqual(address, null)
@@ -22,7 +26,7 @@ contract('Ako', (accounts) => {
 
     it('has a name', async () => {
       const name = await contract.name()
-      assert.equal(name, 'Ako')
+      assert.equal(name, 'A-KO')
     })
 
     it('has a symbol', async () => {
@@ -35,40 +39,72 @@ contract('Ako', (accounts) => {
   describe('minting', async () => {
 
     it('creates a new token', async () => {
-      const result = await contract.mint('#EC058E')
-      const totalSupply = await contract.totalSupply()
-      // SUCCESS
-      assert.equal(totalSupply, 1)
-      const event = result.logs[0].args
-      assert.equal(event.tokenId.toNumber(), 1, 'id is correct')
-      assert.equal(event.from, '0x0000000000000000000000000000000000000000', 'from is correct')
-      assert.equal(event.to, accounts[0], 'to is correct')
-      console.log(result)
-
-      // FAILURE: cannot mint same ako twice
-      await contract.mint('#EC058E').should.be.rejected;
+      const result = await contract.mintToken('dongguk')
     })
+
+    it('total supply plused', async () => {
+      const totalSupply = await contract.totalSupply()
+      assert.equal(totalSupply, 1)
+    })
+
+    it('blance plused', async () => {
+      const balance = await contract.balanceOf(accounts[0])
+      assert.equal(balance, 1)
+    })
+
+    it('is not approved', async () => {
+      const approved = await contract.getApproved(1)
+      assert.equal(approved, 0)
+    })
+
+    it('owner check', async () => {
+      const owner = await contract.ownerOf(1)
+      assert.equal(owner, accounts[0])
+    })
+
+    it('token uri check', async () => {
+      const uri = await contract.tokenURI(1)
+      assert.equal(uri, 'dongguk')
+    })
+
   })
 
-  describe('indexing', async () => {
-    it('lists akos', async () => {
-      // Mint 3 more tokens
-      await contract.mint('#5386E4')
-      await contract.mint('#FFFFFF')
-      await contract.mint('#000000')
-      const totalSupply = await contract.totalSupply()
+  describe('selling', async () => {
 
-      let ako
-      let result = []
-
-      for (var i = 1; i <= totalSupply; i++) {
-        ako = await contract.akos(i - 1)
-        result.push(ako)
-      }
-
-      let expected = ['#EC058E', '#5386E4', '#FFFFFF', '#000000']
-      assert.equal(result.join(','), expected.join(','))
+    it('sells the token', async () => {
+      const result = await contract.sellToken(1, 10)
     })
+
+    it('is approved', async () => {
+      const approved = await contract.getApproved(1)
+      assert.equal(approved, address)
+    })
+
+  })
+
+  describe('buying', async () => {
+
+    it('buy the token', async () => {
+      const result = await contract.buyToken(1, {from: accounts[1], value: 20*1000000000000000000})
+    })
+
+    it('balance check', async () => {
+      const balance1 = await contract.balanceOf(accounts[0])
+      assert.equal(balance1, 0)
+      const balance2 = await contract.balanceOf(accounts[1])
+      assert.equal(balance2, 1)
+    })
+
+    it('is not approved', async () => {
+      const approved = await contract.getApproved(1)
+      assert.equal(approved, 0)
+    })
+
+    it('owner changed', async () => {
+      const owner = await contract.ownerOf(1)
+      assert.equal(owner, accounts[1])
+    })
+
   })
 
 })
