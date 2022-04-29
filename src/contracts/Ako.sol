@@ -1,46 +1,97 @@
-//SPDX-License-Identifier: MIT
-//스마트 컨트랙트에 대한 신뢰를 높이고, 저작권과 같은 문제를 해소하기 위해 솔리디티 코드의 최상단에 SPDX 라이센스를 명시한다. (* SPDX 라이센스는 주석으로 표시)
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.7;
 
-pragma solidity ^0.8.0;   
-
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol"; //NFT를 정의하는 인터페이스
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
-contract MintAko is ERC721Enumerable{
-    string uri;
+contract NFT is ERC721URIStorage, Ownable, ERC721Enumerable {
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIds;
 
-    constructor(string memory _uri) ERC721("Ako", "AKO"){
-        uri = _uri;
+    constructor() ERC721("A-KO", "AKO") {}
+
+    mapping(uint256 => uint256) public costOfTokens; //토큰 가격을 저장하는 딕셔너리
+
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal override(ERC721, ERC721Enumerable) {
+        super._beforeTokenTransfer(from, to, tokenId);
     }
 
-    struct AkoData {
-        uint akoRank;
-        uint akoType;
+    function _burn(uint256 tokenId)
+        internal
+        override(ERC721, ERC721URIStorage)
+    {
+        super._burn(tokenId);
     }
 
-    mapping(uint => AkoData) public akoData;
-
-    // 1 ETH 
-    uint akoPrice = 1000000000000000000;
-
-    function tokenURI(uint _tokenId) override public view returns (string memory) {
-        string memory akoRank = Strings.toString(akoData[_tokenId].akoRank);
-        string memory akoType = Strings.toString(akoData[_tokenId].akoType);
-
-        return string(
-            abi.encodePacked(uri, '/', akoRank, '/', akoType, '.json')
-        );
+    function supportsInterface(bytes4 interfaceId) //지우면 안됨
+        public
+        view
+        override(ERC721, ERC721Enumerable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
     }
 
-
-    function mintAko() public { 
-        uint tokenId = totalSupply() + 1;
-        //totalSupply(): ERC721Enumerable이 제공해주는 것으로 지금까지 민팅된 양을 나타냄.
-
-        akoData[tokenId] = AkoData(4,4);
-        
-        _mint(msg.sender, tokenId);
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
     }
- }
 
+    function mintToken(string memory _tokenURI)
+        public
+        onlyOwner
+        returns (uint256)
+    {
+        _tokenIds.increment();
+
+        uint256 newItemId = _tokenIds.current();
+        _mint(_msgSender(), newItemId);
+        _setTokenURI(newItemId, _tokenURI);
+
+        return newItemId;
+    }
+
+    function sellToken(uint _id, uint _price)
+        public
+    {
+        require(_price>=0, "price should be greater than zero");
+        address tokenOwner = ownerOf(_id);
+        require(tokenOwner==msg.sender, "you are not token owner");
+        _approve(address(this), _id);
+        costOfTokens[_id] = _price;
+
+    }
+
+    function printCost(uint _index) // 토큰 가격을 확인하는 임시 함수
+        public
+        view
+        returns (uint)
+    {
+        return costOfTokens[_index];
+    }
+
+    function buyToken(uint _id)
+        public
+        payable
+    {
+        require(getApproved(_id)!=address(0), "you can not buy"); // 판매 중 이어야 한다
+        require(ownerOf(_id)!=msg.sender, "you are token owner"); // 내 소유가 아니어야 한다
+        uint _price = costOfTokens[_id];
+        address tokenOwner = ownerOf(_id);
+        require(_price<=msg.value, "you need more budget"); // 자금이 부족하지 않아야 한다
+        payable(tokenOwner).transfer(msg.value);
+        _transfer(tokenOwner, msg.sender, _id);
+        costOfTokens[_id] = 0;
+    }
+}
