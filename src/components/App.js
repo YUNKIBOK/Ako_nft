@@ -2,9 +2,52 @@ import React, { Component } from 'react';
 import Web3 from 'web3'
 import './App.css';
 import Ako from '../abis/Ako.json'
-
+import axios from 'axios';
+import FormData from 'form-data';
 
 class App extends Component {
+
+  async handleFile() {
+    console.log('starting')
+
+    // initialize the form data
+    const formData = new FormData()
+
+    // append the file form data to 
+    formData.append('file', this.state.file)
+
+    //formData value 확인
+    for (var value of formData.values()) {
+      console.log(value);
+    }
+
+    // call the keys from .env
+    const API_KEY = '23f6b99091e6b127cc75'
+    const API_SECRET = '35edfd57203a7412d3b35ea5a2db918d720cb4e21d9a3e9e90ce4e41ea22d405'
+
+    // the endpoint needed to upload the file
+    const url =  `https://api.pinata.cloud/pinning/pinFileToIPFS`
+
+    const response = await axios.post(
+      url,
+      formData,
+      {
+          maxContentLength: "Infinity",
+          headers: {
+            'Content-Type': `multipart/form-data; boundary=${formData._boundary}`, 
+              'pinata_api_key': API_KEY,
+              'pinata_secret_api_key': API_SECRET
+          }
+      }
+  )
+
+  console.log(response)
+
+  // get the hash
+  this.setState({myipfsHash: response.data.IpfsHash})
+  //setIPFSHASH(response.data.IpfsHash)
+  
+  }
 
   async componentWillMount() {
     await this.loadWeb3()
@@ -67,7 +110,9 @@ class App extends Component {
       account: '',
       contract: null,
       totalSupply: 0,
-      akos: []
+      akos: [],
+      file: null,
+      myipfsHash: ''
     }
   }
 
@@ -94,6 +139,19 @@ class App extends Component {
             <main role="main" className="col-lg-12 d-flex text-center">
               <div className="content mr-auto ml-auto">
                 <h1>Issue Token</h1>
+
+
+
+
+                <input type="file" name="file" onChange={(event)=> {
+                  event.preventDefault()
+                  const fobj=event.target.files[0]
+                  this.setState({ file: fobj })}}/>
+                <button onClick={()=>this.handleFile()}>Pin</button>
+
+
+
+
                 <form onSubmit={(event) => {
                   event.preventDefault()
                   const ako = this.ako.value
