@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
+import { BrowserRouter,Routes,Route } from 'react-router-dom';
 import Web3 from 'web3'
 import './App.css';
 import Ako from '../abis/Ako.json'
 import axios from 'axios';
 import FormData from 'form-data';
 
-class App extends Component {
+import Header from './Header';
+import Home from './Home'
+import Footer from './Footer'
+import Market from './pages/Market'
+import Manage from './pages/Manage'
+import Create from './pages/Create'
 
+class App extends Component {
+ 
   async handleFile() {
     console.log('starting')
 
@@ -117,76 +125,99 @@ class App extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-          <a
-            className="navbar-brand col-sm-3 col-md-2 mr-0"
-            href="http://www.dappuniversity.com/bootcamp"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Ako Tokens
-          </a>
-          <ul className="navbar-nav px-3">
-            <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
-              <small className="text-white"><span id="account">{this.state.account}</span></small>
-            </li>
-          </ul>
-        </nav>
-        <div className="container-fluid mt-5">
-          <div className="row">
-            <main role="main" className="col-lg-12 d-flex text-center">
-              <div className="content mr-auto ml-auto">
-                <h1>Issue Token</h1>
-
-
-
-
-                <input type="file" name="file" onChange={(event)=> {
-                  event.preventDefault()
-                  const fobj=event.target.files[0]
-                  this.setState({ file: fobj })}}/>
-                <button onClick={()=>this.handleFile()}>Pin</button>
-
-
-
-
-                <form onSubmit={(event) => {
-                  event.preventDefault()
-                  const ako = this.ako.value
-                  this.mint(ako)
-                }}>
-                  <input
-                    type='text'
-                    className='form-control mb-1'
-                    placeholder='e.g. #FFFFFF'
-                    ref={(input) => { this.ako = input }}
-                  />
-                  <input
-                    type='submit'
-                    className='btn btn-block btn-primary'
-                    value='MINT'
-                  />
-                </form>
-              </div>
-            </main>
-          </div>
-          <hr/>
-          <div className="row text-center">
-            { this.state.akos.map((ako, key) => {
-              return(
-                <div key={key} className="col-md-3 mb-3">
-                  <div className="token" style={{ backgroundColor: ako }}></div>
-                  <div>{ako}</div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
+    return(
+      <div className='App'>
+        <BrowserRouter>
+          <Header />
+              <Routes>
+                <Route path="/" element={<Home />}></Route>
+                <Route path="/Market" element={<Market />}></Route>
+                <Route path="/Manage" element={<Manage />}></Route>
+                <Route path="/Create" element={<Create />}></Route>
+              </Routes>
+            <Footer />
+        </BrowserRouter>
       </div>
     );
   }
 }
 
 export default App;
+/*
+const App=()=>{
+
+
+
+
+  return (
+    <div>
+      <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+        <a
+          className="navbar-brand col-sm-3 col-md-2 mr-0"
+          href="http://www.dappuniversity.com/bootcamp"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Ako Tokens
+        </a>
+        <ul className="navbar-nav px-3">
+          <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
+            <small className="text-white"><span id="account">{this.state.account}</span></small>
+          </li>
+        </ul>
+      </nav>
+      <div className="container-fluid mt-5">
+        <div className="row">
+          <main role="main" className="col-lg-12 d-flex text-center">
+            <div className="content mr-auto ml-auto">
+              <h1>Issue Token</h1>
+
+
+
+
+              <input type="file" name="file" onChange={(event)=> {
+                event.preventDefault()
+                const fobj=event.target.files[0]
+                this.setState({ file: fobj })}}/>
+              <button onClick={()=>this.handleFile()}>Pin</button>
+
+
+
+
+              <form onSubmit={(event) => {
+                event.preventDefault()
+                const ako = this.ako.value
+                this.mint(ako)
+              }}>
+                <input
+                  type='text'
+                  className='form-control mb-1'
+                  placeholder='e.g. #FFFFFF'
+                  ref={(input) => { this.ako = input }}
+                />
+                <input
+                  type='submit'
+                  className='btn btn-block btn-primary'
+                  value='MINT'
+                />
+              </form>
+            </div>
+          </main>
+        </div>
+        <hr/>
+        <div className="row text-center">
+          { this.state.akos.map((ako, key) => {
+            return(
+              <div key={key} className="col-md-3 mb-3">
+                <div className="token" style={{ backgroundColor: ako }}></div>
+                <div>{ako}</div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;*/

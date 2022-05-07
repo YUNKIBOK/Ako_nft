@@ -1,0 +1,39 @@
+.homeLi{
+    float: left;
+}
+
+
+.homeLiBtnMar{
+    float: left;
+    background:lightgray;
+    color: black;
+    padding: 12px;
+    border-radius: 10px;
+    margin-left: 270px;
+}
+
+.homeLiBtnMan{
+    float: left;
+    background:lightgray;
+    color: black;
+    padding: 12px;
+    border-radius: 10px;
+    margin-left: 340px;
+}
+
+.homeLiBtnCre{
+    float: left;
+    background:dodgerblue;
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    margin-left: 348px;
+}
+
+.icon{
+    height: 15vw;
+    width: 15vw;
+    margin-top: 50px;
+    margin-left: 190px;
+    margin-bottom: 10px;
+}
