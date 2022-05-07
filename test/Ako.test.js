@@ -82,6 +82,46 @@ contract('Ako', (accounts) => {
 
   })
 
+  describe('cancel selling', async () => {
+
+    it('cancel selling the token', async () => {
+      const result = await contract.sellCancel(1)
+    })
+
+    it('is not approved', async () => {
+      const approved = await contract.getApproved(1)
+      assert.equal(approved, 0)
+    })
+
+  })
+
+  describe('selling again', async () => {
+
+    it('sells the token', async () => {
+      const result = await contract.sellToken(1, 10)
+    })
+
+    it('is approved', async () => {
+      const approved = await contract.getApproved(1)
+      assert.equal(approved, address)
+    })
+
+  })
+
+  describe('change price of the token', async () => {
+
+    it('change price', async () => {
+      const result = await contract.changePrice(1, 5)
+    })
+
+    it('is price changed', async () => {
+      const changedPrice = await contract.printCost(1)
+      assert.equal(changedPrice, 5)
+    })
+
+  })
+
+
   describe('buying', async () => {
 
     it('buy the token', async () => {

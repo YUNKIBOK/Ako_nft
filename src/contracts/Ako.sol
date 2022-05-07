@@ -65,12 +65,12 @@ contract Ako is ERC721URIStorage, Ownable, ERC721Enumerable {
     function sellToken(uint _id, uint _price)
         public
     {
+        require(_exists(_id), "token is not exist");
         require(_price>=0, "price should be greater than zero");
         address tokenOwner = ownerOf(_id);
         require(tokenOwner==msg.sender, "you are not token owner");
         _approve(address(this), _id);
         costOfTokens[_id] = _price;
-
     }
 
     function printCost(uint _index) // 토큰 가격을 확인하는 임시 함수
@@ -85,14 +85,44 @@ contract Ako is ERC721URIStorage, Ownable, ERC721Enumerable {
         public
         payable
     {
+        require(_exists(_id), "token is not exist");
         require(getApproved(_id)!=address(0), "you can not buy"); // 판매 중 이어야 한다
         require(ownerOf(_id)!=msg.sender, "you are token owner"); // 내 소유가 아니어야 한다
         uint _price = costOfTokens[_id];
         address tokenOwner = ownerOf(_id);
         require(_price*1000000000000000000<=msg.value, "you need more budget"); // 자금이 부족하지 않아야 한다
+        
+        (bool paid, ) = tokenOwner.call{gas:0, value: _price*1000000000000000000}("");
+        payable(msg.sender).transfer(msg.value - _price*1000000000000000000);
+        
+        /*
         payable(tokenOwner).transfer(_price*1000000000000000000);
         (bool refunded, ) = msg.sender.call{gas:0, value: msg.value - _price*1000000000000000000}("");
+        */
+        
         _transfer(tokenOwner, msg.sender, _id);
         costOfTokens[_id] = 0;
+    }
+
+    function changePrice(uint _id, uint _newPrice)
+        public
+    {
+        require(_exists(_id), "token is not exist");
+        require(_newPrice>=0, "new price should be greater than zero");
+        address tokenOwner = ownerOf(_id);
+        require(tokenOwner==msg.sender, "you are not token owner");
+        require(getApproved(_id)!=address(0), "you can not buy"); // 판매 중 이어야 한다
+        costOfTokens[_id] = _newPrice;
+    }
+
+    function sellCancel(uint _id)
+        public
+    {
+        address tokenOwner = ownerOf(_id);
+        require(_exists(_id), "token is not exist");
+        require(tokenOwner==msg.sender, "you are not token owner");
+        require(getApproved(_id)!=address(0), "you can not buy"); // 판매 중 이어야 한다
+        costOfTokens[_id] = 0;
+        _approve(address(0), _id);
     }
 }
