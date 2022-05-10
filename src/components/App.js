@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { BrowserRouter,Routes,Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Web3 from 'web3'
 import './App.css';
 import Ako from '../abis/Ako.json'
-import axios from 'axios';
-import FormData from 'form-data';
 
 import Header from './Header';
 import Home from './Home'
@@ -14,54 +12,14 @@ import Manage from './pages/Manage'
 import Create from './pages/Create'
 
 class App extends Component {
- 
-  async handleFile() {
-    console.log('starting')
 
-    // initialize the form data
-    const formData = new FormData()
-
-    // append the file form data to 
-    formData.append('file', this.state.file)
-
-    //formData value 확인
-    for (var value of formData.values()) {
-      console.log(value);
-    }
-
-    // call the keys from .env
-    const API_KEY = '23f6b99091e6b127cc75'
-    const API_SECRET = '35edfd57203a7412d3b35ea5a2db918d720cb4e21d9a3e9e90ce4e41ea22d405'
-
-    // the endpoint needed to upload the file
-    const url =  `https://api.pinata.cloud/pinning/pinFileToIPFS`
-
-    const response = await axios.post(
-      url,
-      formData,
-      {
-          maxContentLength: "Infinity",
-          headers: {
-            'Content-Type': `multipart/form-data; boundary=${formData._boundary}`, 
-              'pinata_api_key': API_KEY,
-              'pinata_secret_api_key': API_SECRET
-          }
-      }
-  )
-
-  console.log(response)
-
-  // get the hash
-  this.setState({myipfsHash: response.data.IpfsHash})
-  //setIPFSHASH(response.data.IpfsHash)
-  
-  }
-
+  // App 마운트 시 무조건 실행하는 함수
   async componentWillMount() {
     await this.loadWeb3()
     await this.loadBlockchainData()
   }
 
+  // web3를 로드하는 함수
   async loadWeb3() {
     if (window.ethereum) {
       window.web3 = new Web3(window.ethereum)
@@ -75,41 +33,102 @@ class App extends Component {
     }
   }
 
+  // blockchain data를 로드하는 함수
   async loadBlockchainData() {
     const web3 = window.web3
-    // Load account
+
+    // 계정을 가져오고 세팅한다
     const accounts = await web3.eth.getAccounts()
     this.setState({ account: accounts[0] })
+    console.log(this.state.account)
 
     const networkId = await web3.eth.net.getId()
     const networkData = Ako.networks[networkId]
-    if(networkData) {
+    if (networkData) {
       const abi = Ako.abi
       const address = networkData.address
+      console.log(address)
+
+      // 컨트랙트를 가져오고 세팅한다
       const contract = new web3.eth.Contract(abi, address)
-      this.setState({ contract })
+      this.setState({ contract: contract })
+      console.log(this.state.contract)
+
+      // 전체 토큰 수를 가져오고 세팅한다
       const totalSupply = await contract.methods.totalSupply().call()
-      this.setState({ totalSupply })
-      // Load Akos
-      for (var i = 1; i <= totalSupply; i++) {
-        const ako = await contract.methods.akos(i - 1).call()
+      this.setState({ totalSupply: totalSupply })
+      console.log(this.state.totalSupply)
+
+      // 전체 토큰의 id와 URI를 프론트 단에서 배열화한다
+      for (var j = 1; j <= totalSupply; j++) {
+        const ako = await contract.methods.akos(j - 1).call()
+        const price = await contract.methods.akos_price(j - 1).call()
+        const approved = await contract.methods.akos_approved(j - 1).call()
+        const owner = await contract.methods.akos_owners(j - 1).call()
         this.setState({
-          akos: [...this.state.akos, ako]
+          akos: [...this.state.akos, ako],
+          prices: [...this.state.prices, price],
+          approved: [...this.state.approved, approved],
+          owners: [...this.state.owners, owner],
         })
       }
       console.log(this.state.akos)
+      console.log(this.state.prices)
+      console.log(this.state.approved)
+      console.log(this.state.owners)
+
     } else {
       window.alert('Smart contract not deployed to detected network.')
     }
   }
 
-  mint = (ako) => {
-    this.state.contract.methods.mint(ako).send({ from: this.state.account })
-    .once('receipt', (receipt) => {
-      this.setState({
-        akos: [...this.state.akos, ako]
+  mint = (uri) => {
+    this.state.contract.methods.mintToken(uri).send({ from: this.state.account })
+      .once('receipt', (receipt) => {
+        this.setState({
+          akos: [...this.state.akos, uri]
+        })
       })
-    })
+  }
+
+  sell = (id, price) => {
+    this.state.contract.methods.sellToken(id, price).send({ from: this.state.account })
+      .once('receipt', (receipt) => {
+        this.setState({
+          prices: [...this.state.prices.slice(0, id), price, ...this.state.prices.slice(id + 1, this.state.totalSupply)],
+          approved: [...this.state.approved.slice(0, id), true, ...this.state.approved.slice(id + 1, this.state.totalSupply)]
+        })
+      })
+  }
+
+  buy = (id) => {
+    this.state.contract.methods.buyToken(id).send({ from: this.state.account })
+      .once('receipt', (receipt) => {
+        this.setState({
+          prices: [...this.state.prices.slice(0, id), 0, ...this.state.prices.slice(id + 1, this.state.totalSupply)],
+          approved: [...this.state.approved.slice(0, id), false, ...this.state.approved.slice(id + 1, this.state.totalSupply)],
+          owners: [...this.state.owners.slice(0, id), this.state.account, ...this.state.owners.slice(id + 1, this.state.totalSupply)]
+        })
+      })
+  }
+
+  changePrice = (id, newPrice) => {
+    this.state.contract.methods.changePrice(id, newPrice).send({ from: this.state.account })
+      .once('receipt', (receipt) => {
+        this.setState({
+          prices: [...this.state.prices.slice(0, id), newPrice, ...this.state.prices.slice(id + 1, this.state.totalSupply)],
+        })
+      })
+  }
+
+  SellCancel = (id) => {
+    this.state.contract.methods.SellCancel(id).send({ from: this.state.account })
+      .once('receipt', (receipt) => {
+        this.setState({
+          prices: [...this.state.prices.slice(0, id), 0, ...this.state.prices.slice(id + 1, this.state.totalSupply)],
+          approved: [...this.state.approved.slice(0, id), false, ...this.state.approved.slice(id + 1, this.state.totalSupply)]
+        })
+      })
   }
 
   constructor(props) {
@@ -119,23 +138,24 @@ class App extends Component {
       contract: null,
       totalSupply: 0,
       akos: [],
-      file: null,
-      myipfsHash: ''
+      prices: [],
+      approved: [],
+      owners: [],
     }
   }
 
   render() {
-    return(
+    return (
       <div className='App'>
         <BrowserRouter>
           <Header />
-              <Routes>
-                <Route path="/" element={<Home />}></Route>
-                <Route path="/Market" element={<Market />}></Route>
-                <Route path="/Manage" element={<Manage />}></Route>
-                <Route path="/Create" element={<Create />}></Route>
-              </Routes>
-            <Footer />
+          <Routes>
+            <Route path="/" element={<Home />}></Route>
+            <Route path="/Market" element={<Market />}></Route>
+            <Route path="/Manage" element={<Manage />}></Route>
+            <Route path="/Create" element={<Create mint={this.mint} sell={this.sell} buy={this.buy} />}></Route>
+          </Routes>
+          <Footer />
         </BrowserRouter>
       </div>
     );
@@ -143,81 +163,3 @@ class App extends Component {
 }
 
 export default App;
-/*
-const App=()=>{
-
-
-
-
-  return (
-    <div>
-      <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-        <a
-          className="navbar-brand col-sm-3 col-md-2 mr-0"
-          href="http://www.dappuniversity.com/bootcamp"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Ako Tokens
-        </a>
-        <ul className="navbar-nav px-3">
-          <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
-            <small className="text-white"><span id="account">{this.state.account}</span></small>
-          </li>
-        </ul>
-      </nav>
-      <div className="container-fluid mt-5">
-        <div className="row">
-          <main role="main" className="col-lg-12 d-flex text-center">
-            <div className="content mr-auto ml-auto">
-              <h1>Issue Token</h1>
-
-
-
-
-              <input type="file" name="file" onChange={(event)=> {
-                event.preventDefault()
-                const fobj=event.target.files[0]
-                this.setState({ file: fobj })}}/>
-              <button onClick={()=>this.handleFile()}>Pin</button>
-
-
-
-
-              <form onSubmit={(event) => {
-                event.preventDefault()
-                const ako = this.ako.value
-                this.mint(ako)
-              }}>
-                <input
-                  type='text'
-                  className='form-control mb-1'
-                  placeholder='e.g. #FFFFFF'
-                  ref={(input) => { this.ako = input }}
-                />
-                <input
-                  type='submit'
-                  className='btn btn-block btn-primary'
-                  value='MINT'
-                />
-              </form>
-            </div>
-          </main>
-        </div>
-        <hr/>
-        <div className="row text-center">
-          { this.state.akos.map((ako, key) => {
-            return(
-              <div key={key} className="col-md-3 mb-3">
-                <div className="token" style={{ backgroundColor: ako }}></div>
-                <div>{ako}</div>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default App;*/

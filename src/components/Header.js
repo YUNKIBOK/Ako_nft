@@ -1,6 +1,7 @@
 import React from "react";
 import {Link} from 'react-router-dom';
-import styles from "./Header.module.css"
+//import styles from "./Header.module.css"
+//import App from "./App";
 
 function Header(props){
     return (
@@ -12,19 +13,13 @@ function Header(props){
             <div style={{display:"flex",position:"absolute",right:"0",marginRight:"20px"}}>
                 <ul style={{display:"flex",listStyle:"none",marginTop:"30px"}}>
                     <li>
-                        <Link to="/Market">
-                            <a style={{color:"white",marginLeft:"50px"}}>Market</a>
-                        </Link>
+                        <a style={{color:"white",marginLeft:"50px"}} href='/Market'>Market</a>
                     </li>
                     <li>
-                        <Link to="/Manage">
-                            <a style={{color:"white",marginLeft:"50px"}}>Manage</a>
-                        </Link>
+                        <a style={{color:"white",marginLeft:"50px"}} href='/Manage'>Manage</a>
                     </li>
                     <li>
-                        <Link to="/Create">
-                            <a style={{color:"white",marginLeft:"50px"}}>Create</a>
-                        </Link>
+                        <a style={{color:"white",marginLeft:"50px"}} href='/Create'>Create</a>
                     </li>
                 </ul>
                 <img src="./images/MetaMask_icon.png" alt="Meta" style={{height:"50px",width:"auto",marginLeft:"50px",marginTop:"20px" }}></img>

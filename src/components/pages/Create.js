@@ -1,26 +1,30 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import FormData from 'form-data';
+import './Create.css';
 
 class Create extends Component {
 
-    async handleFile() {
-        console.log('starting')
+    async ipfsDynamicMint() {
+        console.log('starting upload image to ipfs')
 
-        // initialize the form data
+        // 이미지 파일을 담을 폼 데이터 생성
         const formData = new FormData()
 
-        // append the file form data to 
-        formData.append('file', this.state.file)
+        // 이미지 파일 담기
+        formData.append('file', this.state.imgFile)
 
+        /*
         //formData value 확인
         for (var value of formData.values()) {
             console.log(value);
         }
+        */
 
+        //피나타 pinFileToIPFS API 시작
         // call the keys from .env
-        const API_KEY = '23f6b99091e6b127cc75'
-        const API_SECRET = '35edfd57203a7412d3b35ea5a2db918d720cb4e21d9a3e9e90ce4e41ea22d405'
+        const API_KEY = '4c5ac6d90cd1cc22e856'
+        const API_SECRET = '86b626e2ea379fec6965500c347d7e799df5a5ec416085bb57591e881a22569a'
 
         // the endpoint needed to upload the file
         const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`
@@ -38,35 +42,30 @@ class Create extends Component {
             }
         )
 
+        //결과 출력
         console.log(response)
 
         // get the hash
-        this.setState({ myipfsHash: response.data.IpfsHash })
-        console.log(this.state.myipfsHash)
-        //setIPFSHASH(response.data.IpfsHash)
+        this.setState({ ipfsHash: response.data.IpfsHash })
+        console.log(this.state.ipfsHash)
 
-    
-        
 
-        console.log('starting')
 
-        // call the keys from .env
-        //const API_KEY = '23f6b99091e6b127cc75'
-        //const API_SECRET = '35edfd57203a7412d3b35ea5a2db918d720cb4e21d9a3e9e90ce4e41ea22d405'
+        console.log('starting starting upload json to ipfs')
 
+        //피나타 pinJSONTOIPFS 시작
         // the endpoint needed to upload the file
         const url2 = `https://api.pinata.cloud/pinning/pinJSONToIPFS`
-        
+
         const response2 = await axios.post(
-            url2,{
-                name: this.state.name,
-                description: this.state.description,
-                image: 'https://gateway.pinata.cloud/ipfs/' + this.state.myipfsHash
-            },
+            url2, {
+            name: this.state.imgName,
+            description: this.state.imgDescription,
+            image: 'https://gateway.pinata.cloud/ipfs/' + this.state.ipfsHash
+        },
             {
                 maxContentLength: "Infinity",
                 headers: {
-                    //'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
                     'pinata_api_key': API_KEY,
                     'pinata_secret_api_key': API_SECRET
                 }
@@ -76,111 +75,87 @@ class Create extends Component {
         console.log(response2)
 
         // get the hash
-        this.setState({ myipfsHash: response2.data.IpfsHash })
-        console.log(this.state.myipfsHash)
-        //setIPFSHASH(response.data.IpfsHash)
+        this.setState({ ipfsHash: response2.data.IpfsHash })
+        console.log(this.state.ipfsHash)
+        const tokenURI = 'https://gateway.pinata.cloud/ipfs/' + this.state.ipfsHash
 
-        // get the hash
-        
-        //setIPFSHASH(response.data.IpfsHash)
-
+        //Mint
+        this.props.mint(tokenURI)
     }
 
-    /*async handleJson() {
-        console.log('starting')
-
-        // call the keys from .env
-        const API_KEY = '23f6b99091e6b127cc75'
-        const API_SECRET = '35edfd57203a7412d3b35ea5a2db918d720cb4e21d9a3e9e90ce4e41ea22d405'
-
-        // the endpoint needed to upload the file
-        const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`
-        
-        const response = await axios.post(
-            url,
-            {
-                name: this.state.name,
-                description: this.state.description,
-                image: this.state.myipfsHash
-            },
-            {
-                maxContentLength: "Infinity",
-                headers: {
-                    //'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
-                    'pinata_api_key': API_KEY,
-                    'pinata_secret_api_key': API_SECRET
-                }
-            }
+    // 미리보기를 위한 이미지 처리 과정
+    encodeFileToBase64 = (fileBlob) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(fileBlob);
+        return new Promise((resolve) => {
+            reader.onload = () => {
+                this.setState({ imgSrc: reader.result })
+                resolve();
+            };
+        }
         )
-
-        console.log(response)
-
-        // get the hash
-        this.setState({ myipfsHash: response.data.IpfsHash })
-        console.log(this.state.myipfsHash)
-        //setIPFSHASH(response.data.IpfsHash)
-
-        // get the hash
-        
-        //setIPFSHASH(response.data.IpfsHash)
-
-    }*/
-
-    mint = (ako) => {
-        this.state.contract.methods.mint(ako).send({ from: this.state.account })
-            .once('receipt', (receipt) => {
-                this.setState({
-                    akos: [...this.state.akos, ako]
-                })
-            })
     }
 
     constructor(props) {
         super(props)
         this.state = {
-            account: '',
-            contract: null,
-            totalSupply: 0,
-            akos: [],
-            file: null,
-            myipfsHash: '',
-            name: '',
-            description: ''
+            imgFile: null,
+            ipfsHash: '',
+            imgName: '',
+            imgDescription: '',
+            imgSrc: ''
         }
     }
 
     render() {
         return (
-            <div>
-                <h1>create 페이지 입니다.</h1>
-                <input type="file" name="file" onChange={(event) => {
-                    event.preventDefault()
-                    const fobj = event.target.files[0]
-                    this.setState({ file: fobj })
-                }} />
-                <input type="text" name="txtname" onChange={(event) => {
-                    event.preventDefault()
-                    this.setState({ name: event.target.value })
-                }}
-                />
-                <input type="text" name="description" onChange={(event) => {
-                    event.preventDefault()
-                    this.setState({ description: event.target.value })
-                }}/>
+            <div className="container">
+                <div className="left">
+                    <h3>Load an image.</h3>
+                
 
-            
-            <button onClick={() => {
-                this.handleFile()
-                //console.log(this.state.name)
-                //console.log(this.state.description)
-                //this.handleJson()
+                    <br /> &emsp; &emsp; &emsp;
+                    <input type="file" name="imgFile" onChange={(event) => {
+                        event.preventDefault()
+                        const fobj = event.target.files[0]
+                        this.setState({ imgFile: fobj })
+                        this.encodeFileToBase64(event.target.files[0]);
+                    }} />
+
+                    <br /> &emsp; &emsp; &emsp;
+                    <div className="preview"> {this.state.imgSrc && <img src={this.state.imgSrc} alt="preview-img" width='200' height='200' />} </div>
+                </div>
+
+                <div class="right">
+                    <div>
+                        <h3>Name</h3>
+                        <input type="text" name="imgName" placeholder="👀" onChange={(event) => {
+                            event.preventDefault()
+                            this.setState({ imgName: event.target.value })
+                        }} />
+                    </div>
+
+                    <div>
+                        <h3>Description</h3>
+                        <input type="text" className="textbox" name="imgDescription" placeholder="Describe your NFT." onChange={(event) => {
+                            event.preventDefault()
+                            this.setState({ imgDescription: event.target.value })
+                        }} />
+                    </div>
+
+                    <br />
+                    <div>
+                        <button onClick={() => {
+                            this.ipfsDynamicMint()
+                        }}>Mint</button>
+                        <button onClick={() => {
+                            this.props.buy(1)
+                        }}>test</button>
 
 
-            }}>Pin</button>
+                    </div>
+                </div>
             </div>
-
-
-
         );
     }
 }

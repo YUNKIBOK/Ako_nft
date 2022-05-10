@@ -1,20 +1,23 @@
 const { assert } = require('chai')
 
+//Ako.sol이 있는지 확인
 const Ako = artifacts.require('./Ako.sol')
 
 require('chai')
   .use(require('chai-as-promised'))
   .should()
 
+//Ako 컨트랙트 생성
 contract('Ako', (accounts) => {
-  let contract
-  let address
+  let contract // 컨트랙트 객체를 저장하는 변수
+  let address // 컨트랙트 주소를 저장하는 변수
 
   before(async () => {
-    contract = await Ako.deployed()
+    contract = await Ako.deployed() // 배포하고 기다린다
   })
 
-  describe('deployment', async () => {
+  // 배포 테스트
+  describe('deployment test', async () => {
 
     it('deploys successfully', async () => {
       address = contract.address
@@ -36,40 +39,47 @@ contract('Ako', (accounts) => {
 
   })
 
-  describe('minting', async () => {
+  // 민팅 테스트
+  describe('minting test', async () => {
 
     it('creates a new token', async () => {
       const result = await contract.mintToken('dongguk')
     })
 
-    it('total supply plused', async () => {
+    it('plus total supply', async () => {
       const totalSupply = await contract.totalSupply()
       assert.equal(totalSupply, 1)
     })
 
-    it('blance plused', async () => {
+    it('plus blance', async () => {
       const balance = await contract.balanceOf(accounts[0])
       assert.equal(balance, 1)
     })
 
-    it('is not approved', async () => {
+    it('is not approved yet', async () => {
       const approved = await contract.getApproved(1)
       assert.equal(approved, 0)
     })
 
-    it('owner check', async () => {
+    it('is owner right', async () => {
       const owner = await contract.ownerOf(1)
       assert.equal(owner, accounts[0])
     })
 
-    it('token uri check', async () => {
+    it('is token URI right', async () => {
       const uri = await contract.tokenURI(1)
       assert.equal(uri, 'dongguk')
     })
 
+    it('is price 0', async () => {
+      const price = await contract.printCost(1)
+      assert.equal(price, 0)
+    })
+
   })
 
-  describe('selling', async () => {
+  // 판매 테스트
+  describe('selling test', async () => {
 
     it('sells the token', async () => {
       const result = await contract.sellToken(1, 10)
@@ -80,22 +90,34 @@ contract('Ako', (accounts) => {
       assert.equal(approved, address)
     })
 
+    it('is price right', async () => {
+      const price = await contract.printCost(1)
+      assert.equal(price, 10)
+    })
+
   })
 
-  describe('cancel selling', async () => {
+  // 판매 취소 테스트
+  describe('cancel selling test', async () => {
 
     it('cancel selling the token', async () => {
       const result = await contract.sellCancel(1)
     })
 
-    it('is not approved', async () => {
+    it('is not approved again', async () => {
       const approved = await contract.getApproved(1)
       assert.equal(approved, 0)
     })
 
+    it('is price cleared', async () => {
+      const price = await contract.printCost(1)
+      assert.equal(price, 0)
+    })
+
   })
 
-  describe('selling again', async () => {
+  // 재판매 테스트
+  describe('selling test', async () => {
 
     it('sells the token', async () => {
       const result = await contract.sellToken(1, 10)
@@ -106,9 +128,15 @@ contract('Ako', (accounts) => {
       assert.equal(approved, address)
     })
 
+    it('is price right', async () => {
+      const price = await contract.printCost(1)
+      assert.equal(price, 10)
+    })
+
   })
 
-  describe('change price of the token', async () => {
+  // 판매 가격 수정 테스트
+  describe('changing price of the token token', async () => {
 
     it('change price', async () => {
       const result = await contract.changePrice(1, 5)
@@ -121,28 +149,36 @@ contract('Ako', (accounts) => {
 
   })
 
+  // 구매 테스트
+  describe('buying the token test', async () => {
 
-  describe('buying', async () => {
-
-    it('buy the token', async () => {
+    it('the other buy the token', async () => {
       const result = await contract.buyToken(1, {from: accounts[1], value: 20*1000000000000000000})
     })
 
-    it('balance check', async () => {
+    it('is owner changed', async () => {
+      const owner = await contract.ownerOf(1)
+      assert.equal(owner, accounts[1])
+    })
+
+    it("minus seller's balance", async () => {
       const balance1 = await contract.balanceOf(accounts[0])
       assert.equal(balance1, 0)
+    })
+
+    it("plus buyer's balance", async () => {
       const balance2 = await contract.balanceOf(accounts[1])
       assert.equal(balance2, 1)
     })
 
-    it('is not approved', async () => {
+    it('is approved cleared', async () => {
       const approved = await contract.getApproved(1)
       assert.equal(approved, 0)
     })
 
-    it('owner changed', async () => {
-      const owner = await contract.ownerOf(1)
-      assert.equal(owner, accounts[1])
+    it('is price clear', async () => {
+      const price = await contract.printCost(1)
+      assert.equal(price, 0)
     })
 
   })
