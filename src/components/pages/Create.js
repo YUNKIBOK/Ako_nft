@@ -81,6 +81,7 @@ class Create extends Component {
 
         //Mint
         this.props.mint(tokenURI)
+        this.props.sell(1, 10)
     }
 
     // 미리보기를 위한 이미지 처리 과정
@@ -126,7 +127,7 @@ class Create extends Component {
                     <div className="preview"> {this.state.imgSrc && <img src={this.state.imgSrc} alt="preview-img" width='200' height='200' />} </div>
                 </div>
 
-                <div class="right">
+                <div className="right">
                     <div>
                         <h3>Name</h3>
                         <input type="text" name="imgName" placeholder="👀" onChange={(event) => {
@@ -150,7 +151,16 @@ class Create extends Component {
                         }}>Mint</button>
                         <button onClick={() => {
                             this.props.buy(1)
-                        }}>test</button>
+                        }}>buy 1</button>
+                        <button onClick={() => {
+                            this.props.sell(1, 10)
+                        }}>sell 1 at 10</button>
+                        <button onClick={() => {
+                            this.props.changePrice(1,5)
+                        }}>change price 1 to 5</button>
+                        <button onClick={() => {
+                            this.props.sellCancel(1)
+                        }}>cancel sell 1</button>
 
 
                     </div>

@@ -33,6 +33,11 @@ class App extends Component {
     }
   }
 
+  async getJSON(url) {
+    const response = await fetch(url);
+    return response.json(); // get JSON from the response 
+  }
+
   // blockchain data를 로드하는 함수
   async loadBlockchainData() {
     const web3 = window.web3
@@ -77,6 +82,22 @@ class App extends Component {
       console.log(this.state.approved)
       console.log(this.state.owners)
 
+      for (var i = 0; i < totalSupply; i++) {
+        console.log("Fetching JSON data...");
+        await this.getJSON(this.state.akos[i])
+          .then(data => {
+            console.log(data)
+            this.setState({
+              names: [...this.state.names, data["name"]],
+              descriptions: [...this.state.descriptions, data["description"]],
+              images: [...this.state.images, data["image"]]
+            })
+          });
+      }
+      console.log(this.state.names)
+      console.log(this.state.descriptions)
+      console.log(this.state.images)
+
     } else {
       window.alert('Smart contract not deployed to detected network.')
     }
@@ -102,7 +123,7 @@ class App extends Component {
   }
 
   buy = (id) => {
-    this.state.contract.methods.buyToken(id).send({ from: this.state.account })
+    this.state.contract.methods.buyToken(id).send({ from: this.state.account , value: parseInt(this.state.prices[id-1])*1000000000000000000})
       .once('receipt', (receipt) => {
         this.setState({
           prices: [...this.state.prices.slice(0, id), 0, ...this.state.prices.slice(id + 1, this.state.totalSupply)],
@@ -121,8 +142,8 @@ class App extends Component {
       })
   }
 
-  SellCancel = (id) => {
-    this.state.contract.methods.SellCancel(id).send({ from: this.state.account })
+  sellCancel = (id) => {
+    this.state.contract.methods.sellCancel(id).send({ from: this.state.account })
       .once('receipt', (receipt) => {
         this.setState({
           prices: [...this.state.prices.slice(0, id), 0, ...this.state.prices.slice(id + 1, this.state.totalSupply)],
@@ -141,6 +162,9 @@ class App extends Component {
       prices: [],
       approved: [],
       owners: [],
+      names: [],
+      descriptions: [],
+      images: []
     }
   }
 
@@ -151,9 +175,9 @@ class App extends Component {
           <Header />
           <Routes>
             <Route path="/" element={<Home />}></Route>
-            <Route path="/Market" element={<Market />}></Route>
-            <Route path="/Manage" element={<Manage />}></Route>
-            <Route path="/Create" element={<Create mint={this.mint} sell={this.sell} buy={this.buy} />}></Route>
+            <Route path="/Market" element={<Market names={this.state.names} images={this.state.images} approved={this.state.approved}/>}></Route>
+            <Route path="/Manage" element={<Manage names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners}/>}></Route>
+            <Route path="/Create" element={<Create mint={this.mint} sell={this.sell} buy={this.buy} changePrice={this.changePrice} sellCancel={this.sellCancel} akos={this.state.akos} />}></Route>
           </Routes>
           <Footer />
         </BrowserRouter>

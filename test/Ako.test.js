@@ -153,7 +153,7 @@ contract('Ako', (accounts) => {
   describe('buying the token test', async () => {
 
     it('the other buy the token', async () => {
-      const result = await contract.buyToken(1, {from: accounts[1], value: 20*1000000000000000000})
+      const result = await contract.buyToken(1, {from: accounts[1], value: 5*1000000000000000000})
     })
 
     it('is owner changed', async () => {

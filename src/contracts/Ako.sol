@@ -111,11 +111,14 @@ contract Ako is ERC721URIStorage, Ownable, ERC721Enumerable {
         require(ownerOf(_id)!=msg.sender, "you are token owner"); // 내 소유가 아니어야 한다
         uint _price = costOfTokens[_id];
         address tokenOwner = ownerOf(_id);
-        require(_price*1000000000000000000<=msg.value, "you need more budget"); // 자금이 부족하지 않아야 한다
-        
+        require(_price*1000000000000000000<=msg.value, "you need more budget"); // 가스와 가격을 포함하기 때문에 가격보다 자금이 많아야 한다
+        payable(tokenOwner).transfer(msg.value);
+
+        /*
         // gas가 두 번 소비되는 것을 방지하기 위해 call 사용
         (bool paid, ) = tokenOwner.call{gas:0, value: _price*1000000000000000000}("");
         payable(msg.sender).transfer(msg.value - _price*1000000000000000000);
+        */
         
         /*
         payable(tokenOwner).transfer(_price*1000000000000000000);
