@@ -6,9 +6,9 @@ import {Link} from 'react-router-dom';
 function Header(props){
     return (
         <header>
-        <div style={{display:"flex",background:"midnightblue"}}>
+        <div style={{display:"flex",background:"midnightblue",height:"85px"}}>
             <Link to="/">
-                    <h1 style={{color:"white",marginLeft:"30px"}}>BokSociety</h1>
+                    <h1 style={{color:"white",marginLeft:"30px",marginTop:"15px"}}>BokSociety</h1>
             </Link>
             <div style={{display:"flex",position:"absolute",right:"0",marginRight:"20px"}}>
                 <ul style={{display:"flex",listStyle:"none",marginTop:"30px"}}>
