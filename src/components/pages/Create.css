@@ -9,7 +9,11 @@
   box-sizing: border-box;
   background-color: white;
   text-align: center;
+<<<<<<< HEAD
   margin-top: 10%;
+=======
+  margin-top: 3%;
+>>>>>>> 58d5b4a2f106b84176282863899b56506f75426a
 }
 
 .right{
@@ -17,7 +21,11 @@
   float: right;
   box-sizing: border-box;
   background-color: white;
+<<<<<<< HEAD
   margin-top: 10%;
+=======
+  margin-top: 3%;
+>>>>>>> 58d5b4a2f106b84176282863899b56506f75426a
 }
 
 .textbox{

@@ -23,8 +23,8 @@ class Create extends Component {
 
         //피나타 pinFileToIPFS API 시작
         // call the keys from .env
-        const API_KEY = '4c5ac6d90cd1cc22e856'
-        const API_SECRET = '86b626e2ea379fec6965500c347d7e799df5a5ec416085bb57591e881a22569a'
+        const API_KEY = '8618f1c88153859c1e84'
+        const API_SECRET = '4d7c1aa926aa4f043113fc700665eaf531e3abfa69cc1a057035178a7397520d'
 
         // the endpoint needed to upload the file
         const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`
@@ -113,7 +113,12 @@ class Create extends Component {
                 <div className="left">
                     <h3>Load an image.</h3>
                 
+<<<<<<< HEAD
                     <br /> &emsp; &emsp; &emsp;
+=======
+
+                    <br /> &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp;
+>>>>>>> 58d5b4a2f106b84176282863899b56506f75426a
                     <input type="file" name="imgFile" onChange={(event) => {
                         event.preventDefault()
                         const fobj = event.target.files[0]
@@ -121,7 +126,7 @@ class Create extends Component {
                         this.encodeFileToBase64(event.target.files[0]);
                     }} />
 
-                    <br /> &emsp; &emsp; &emsp;
+                    <br /> &emsp; &emsp; &emsp; 
                     <div className="preview"> {this.state.imgSrc && <img src={this.state.imgSrc} alt="preview-img" width='200' height='200' />} </div>
                 </div>
 
