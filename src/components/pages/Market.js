@@ -1,6 +1,7 @@
 import React from "react";
 import { Component } from 'react';
 import './Market.css';
+import {Link} from 'react-router-dom';
 
 class Market extends Component {
 
@@ -8,12 +9,19 @@ class Market extends Component {
     return (
       <div>
         <h3>마켓 임시 페이지입니다.</h3>
-        <div className="row text-center">
+        <div className="row text-center" style={{height:'700px'}}>
           {this.props.images.map((uri, key) => {
             return (
+
               <div key={key} className="col-md-2 mb-3">
-                {this.props.approved[key] && <img className='token' src={uri} alt="token"></img>}
-                {this.props.approved[key] && <div>{this.props.names[key]}</div>}
+                <Link to="/Detail">
+                  <div onClick={() => {
+                    this.props.idUpdate(key)
+                    this.props.priceUpdate(key)}}>
+                  {this.props.approved[key] && <img className='token' src={uri} alt="token"></img>}
+                  {this.props.approved[key] && <div>{this.props.names[key]}</div>}
+                  </div>
+                </Link>
               </div>
             )
           })}

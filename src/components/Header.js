@@ -1,9 +1,11 @@
-import React from "react";
 import {Link} from 'react-router-dom';
+import React, { Component } from 'react';
 //import styles from "./Header.module.css"
 //import App from "./App";
 
-function Header(props){
+
+class Header extends Component {
+render(){
     return (
         <header>
         <div style={{display:"flex",background:"midnightblue",height:"85px"}}>
@@ -27,6 +29,7 @@ function Header(props){
         </div>
         </header>
     );
+}
 }
 
 export default Header;

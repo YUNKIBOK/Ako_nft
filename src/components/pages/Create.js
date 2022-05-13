@@ -81,7 +81,6 @@ class Create extends Component {
 
         //Mint
         this.props.mint(tokenURI)
-        this.props.sell(1, 10)
     }
 
     // 미리보기를 위한 이미지 처리 과정
@@ -114,7 +113,6 @@ class Create extends Component {
                 <div className="left">
                     <h3>Load an image.</h3>
                 
-
                     <br /> &emsp; &emsp; &emsp;
                     <input type="file" name="imgFile" onChange={(event) => {
                         event.preventDefault()
@@ -135,7 +133,7 @@ class Create extends Component {
                             this.setState({ imgName: event.target.value })
                         }} />
                     </div>
-
+                    <br/>
                     <div>
                         <h3>Description</h3>
                         <input type="text" className="textbox" name="imgDescription" placeholder="Describe your NFT." onChange={(event) => {
@@ -153,7 +151,7 @@ class Create extends Component {
                             this.props.buy(1)
                         }}>buy 1</button>
                         <button onClick={() => {
-                            this.props.sell(1, 10)
+                            this.props.sell(7, 12)
                         }}>sell 1 at 10</button>
                         <button onClick={() => {
                             this.props.changePrice(1,5)
@@ -161,7 +159,6 @@ class Create extends Component {
                         <button onClick={() => {
                             this.props.sellCancel(1)
                         }}>cancel sell 1</button>
-
 
                     </div>
                 </div>
