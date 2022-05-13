@@ -113,12 +113,7 @@ class Create extends Component {
                 <div className="left">
                     <h3>Load an image.</h3>
                 
-<<<<<<< HEAD
                     <br /> &emsp; &emsp; &emsp;
-=======
-
-                    <br /> &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp;
->>>>>>> 58d5b4a2f106b84176282863899b56506f75426a
                     <input type="file" name="imgFile" onChange={(event) => {
                         event.preventDefault()
                         const fobj = event.target.files[0]
