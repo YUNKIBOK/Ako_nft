@@ -151,7 +151,7 @@ class Create extends Component {
                             this.props.buy(1)
                         }}>buy 1</button>
                         <button onClick={() => {
-                            this.props.sell(7, 12)
+                            this.props.sell(1, 12)
                         }}>sell 1 at 10</button>
                         <button onClick={() => {
                             this.props.changePrice(1,5)

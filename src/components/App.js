@@ -11,6 +11,8 @@ import Market from './pages/Market'
 import Manage from './pages/Manage'
 import Create from './pages/Create'
 import Detail from './pages/Detail'
+import MyCollection from './managePages/MyCollection';
+import OnMarket from './managePages/OnMarket';
 
 class App extends Component {
 
@@ -98,8 +100,6 @@ class App extends Component {
       console.log(this.state.names)
       console.log(this.state.descriptions)
       console.log(this.state.images)
-      console.log(parseInt(this.state.prices[0]._hex, 16))
-
     } else {
       window.alert('Smart contract not deployed to detected network.')
     }
@@ -193,7 +193,10 @@ class App extends Component {
             <Route path="/" element={<Home />}></Route>
             <Route path="/Detail" element={<Detail id={this.state.id} names={this.state.names} images={this.state.images} descriptions={this.state.descriptions} price={this.state.price}/>}></Route>
             <Route path="/Market" element={<Market priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} id={this.state.id}/>}></Route>
-            <Route path="/Manage" element={<Manage names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners}/>}></Route>
+            <Route path="/Manage" element={<Manage names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners}/>}>
+              <Route path="MyCollection" element={<MyCollection priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners}/>}></Route>
+              <Route path="OnMarket" element={<OnMarket priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners}/>}></Route>
+            </Route>
             <Route path="/Create" element={<Create mint={this.mint} sell={this.sell} buy={this.buy} changePrice={this.changePrice} sellCancel={this.sellCancel} akos={this.state.akos} />}></Route>
           </Routes>
           <Footer />

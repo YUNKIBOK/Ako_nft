@@ -18,7 +18,7 @@ render(){
                         <a style={{color:"white",marginLeft:"50px"}} href='/Market'>Market</a>
                     </li>
                     <li>
-                        <a style={{color:"white",marginLeft:"50px"}} href='/Manage'>Manage</a>
+                        <a style={{color:"white",marginLeft:"50px"}} href='/Manage/MyCollection'>Manage</a>
                     </li>
                     <li>
                         <a style={{color:"white",marginLeft:"50px"}} href='/Create'>Create</a>

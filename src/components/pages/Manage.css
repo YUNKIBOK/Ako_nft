@@ -4,3 +4,10 @@
     border-radius: 50%;
     display: inline-block;
   }
+
+  .manageMenu{
+    background:lightgray;
+    padding: 8px;
+    border-radius: 10px;
+    margin-right: 1px;
+}

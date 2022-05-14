@@ -1,23 +1,23 @@
 import React from "react";
 import { Component } from 'react';
 import './Manage.css';
+import { Link,Outlet } from 'react-router-dom';
 
 class Manage extends Component {
 
     render() {
         return (
             <div>
-                <h3>관리 임시 페이지입니다.</h3>
-                <div className="row text-center">
-                    {this.props.images.map((uri, key) => {
-                        return (
-                            <div key={key} className="col-md-2 mb-3">
-                                {this.props.approved[key] && (this.props.owners[key] === this.props.account) && <img className='token' src={uri} alt="token"></img>}
-                                {this.props.approved[key] && (this.props.owners[key] === this.props.account) && <div>{this.props.names[key]}</div>}
-                            </div>
-                        )
-                    })}
-                </div>
+                <h3 style={{color:"dimgrey",marginLeft:"30px"}}>Manage your NFTs.</h3>
+                  <ul style={{display:"flex",listStyle:"none",marginTop:"30px"}}>
+                      <li className="manageMenu">
+                          <Link to="/Manage/MyCollection" style={{color:"black"}}>MyCollection </Link>
+                      </li>
+                      <li className="manageMenu">
+                          <Link to="/Manage/OnMarket" style={{color:"black"}}>OnMarket</Link>
+                      </li>
+                  </ul>
+                  <Outlet />
             </div>
         );
     }
