@@ -80,9 +80,11 @@ class Create extends Component {
         const tokenURI = 'https://gateway.pinata.cloud/ipfs/' + this.state.ipfsHash
 
         //Mint
-        this.props.mint(tokenURI)
+        this.props.mint(tokenURI);
+
     }
 
+    
     // 미리보기를 위한 이미지 처리 과정
     encodeFileToBase64 = (fileBlob) => {
         const reader = new FileReader();
@@ -147,18 +149,8 @@ class Create extends Component {
                         <button onClick={() => {
                             this.ipfsDynamicMint()
                         }}>Mint</button>
-                        <button onClick={() => {
-                            this.props.buy(1)
-                        }}>buy 1</button>
-                        <button onClick={() => {
-                            this.props.sell(1, 12)
-                        }}>sell 1 at 10</button>
-                        <button onClick={() => {
-                            this.props.changePrice(1,5)
-                        }}>change price 1 to 5</button>
-                        <button onClick={() => {
-                            this.props.sellCancel(1)
-                        }}>cancel sell 1</button>
+
+
 
                     </div>
                 </div>

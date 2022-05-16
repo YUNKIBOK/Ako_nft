@@ -11,13 +11,14 @@ class OnMarket extends Component {
                 <div className="row text-center" style={{height:'600px'}}>
                     {this.props.images.map((uri, key) => {
                         return (
-                            <div key={key} className="col-md-2 mb-3">
+                            this.props.approved[key] && (this.props.owners[key] === this.props.account) && <div key={key} className="col-md-2 mb-3">
                             <Link to="/Detail">
                               <div onClick={() => {
                                 this.props.idUpdate(key)
                                 this.props.priceUpdate(key)}}>
                                 {this.props.approved[key] && (this.props.owners[key] === this.props.account) && <img className='token' src={uri} alt="token"></img>}
                                 {this.props.approved[key] && (this.props.owners[key] === this.props.account) && <div>{this.props.names[key]}</div>}
+                                {this.props.approved[key] && (this.props.owners[key] === this.props.account) && <div>{this.props.likes[key]}</div>}
                             </div>
                             </Link>
               </div>

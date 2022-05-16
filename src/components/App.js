@@ -20,6 +20,7 @@ class App extends Component {
   async componentWillMount() {
     await this.loadWeb3()
     await this.loadBlockchainData()
+    await this.callLikes()
   }
 
   // web3를 로드하는 함수
@@ -105,52 +106,72 @@ class App extends Component {
     }
   }
 
+  createRow() {
+    fetch("http://localhost:3001/mint", {
+      method: "post",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+      });
+  };
+
+
   mint = (uri) => {
     this.state.contract.methods.mintToken(uri).send({ from: this.state.account })
-      .once('receipt', (receipt) => {
-        this.setState({
+    .on('confirmation', function(confNumber, receipt){
+      this.createRow();
+      window.location.replace("/Create")
+        /*this.setState({
           akos: [...this.state.akos, uri]
-        })
+        })*/
       })
   }
 
   sell = (id, price) => {
     this.state.contract.methods.sellToken(id, price).send({ from: this.state.account })
-      .once('receipt', (receipt) => {
-        this.setState({
+    .on('confirmation', function(confNumber, receipt){
+      window.location.replace("/Manage/OnMarket")
+        /*this.setState({
           prices: [...this.state.prices.slice(0, id), price, ...this.state.prices.slice(id + 1, this.state.totalSupply)],
           approved: [...this.state.approved.slice(0, id), true, ...this.state.approved.slice(id + 1, this.state.totalSupply)]
-        })
+        })*/
       })
   }
 
   buy = (id) => {
     this.state.contract.methods.buyToken(id).send({ from: this.state.account , value: parseInt(this.state.prices[id-1])*1000000000000000000})
-      .once('receipt', (receipt) => {
-        this.setState({
+    .on('confirmation', function(confNumber, receipt){
+      window.location.replace("/Manage/MyCollection")
+        /*this.setState({
           prices: [...this.state.prices.slice(0, id), 0, ...this.state.prices.slice(id + 1, this.state.totalSupply)],
           approved: [...this.state.approved.slice(0, id), false, ...this.state.approved.slice(id + 1, this.state.totalSupply)],
           owners: [...this.state.owners.slice(0, id), this.state.account, ...this.state.owners.slice(id + 1, this.state.totalSupply)]
-        })
+        })*/
       })
   }
 
   changePrice = (id, newPrice) => {
     this.state.contract.methods.changePrice(id, newPrice).send({ from: this.state.account })
-      .once('receipt', (receipt) => {
-        this.setState({
+    .on('confirmation', function(confNumber, receipt){
+      window.location.replace("/Manage/OnMarket")
+        /*this.setState({
           prices: [...this.state.prices.slice(0, id), newPrice, ...this.state.prices.slice(id + 1, this.state.totalSupply)],
-        })
+        })*/
       })
   }
 
   sellCancel = (id) => {
     this.state.contract.methods.sellCancel(id).send({ from: this.state.account })
-      .once('receipt', (receipt) => {
-        this.setState({
+    .on('confirmation', function(confNumber, receipt){
+      window.location.replace("/Manage/OnMarket")
+        /*this.setState({
           prices: [...this.state.prices.slice(0, id), 0, ...this.state.prices.slice(id + 1, this.state.totalSupply)],
           approved: [...this.state.approved.slice(0, id), false, ...this.state.approved.slice(id + 1, this.state.totalSupply)]
-        })
+        })*/
       })
   }
 
@@ -168,7 +189,8 @@ class App extends Component {
       descriptions: [],
       images: [],
       id: 0,
-      price: 0
+      price: 0,
+      likes: []
     }
   }
 
@@ -184,6 +206,62 @@ class App extends Component {
     });
   };
 
+  likesUpdate=(value) => {
+    this.setState({likes: [...this.state.likes, value]});
+  }
+
+  async callLikes() {
+    /*const post = {
+      totalSupply: parseInt(this.state.totalSupply._hex, 16),
+    };
+    fetch("http://localhost:3001/delete", {
+      method: "post",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(post),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+      });
+
+      fetch("http://localhost:3001/set", {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(),
+      })
+        .then((res) => res.json())
+        .then((json) => {
+        });*/
+
+    console.log('callLikes 시작');
+    for (var j = 1; j <= this.state.totalSupply; j++) {
+      await this.callLike(j);
+    }
+    console.log(this.state.likes)
+  }
+
+  async callLike(tokenId) {
+      const post = {
+        id: tokenId,
+      };
+      await fetch("http://localhost:3001/likes", {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(post),
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          this.likesUpdate(json.likes)
+        });
+    };
+
+
+
   render() {
     return (
       <div className='App'>
@@ -191,13 +269,13 @@ class App extends Component {
           <Header account={this.state.account}/>
           <Routes>
             <Route path="/" element={<Home />}></Route>
-            <Route path="/Detail" element={<Detail id={this.state.id} names={this.state.names} images={this.state.images} descriptions={this.state.descriptions} price={this.state.price}/>}></Route>
-            <Route path="/Market" element={<Market priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} id={this.state.id}/>}></Route>
+            <Route path="/Detail" element={<Detail account={this.state.account} owners={this.state.owners} approved={this.state.approved} sell={this.sell}  changePrice={this.changePrice} sellCancel={this.sellCancel} akos={this.state.akos} buy={this.buy} likes={this.state.likes} id={this.state.id} names={this.state.names} images={this.state.images} descriptions={this.state.descriptions} price={this.state.price}/>}></Route>
+            <Route path="/Market" element={<Market likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} id={this.state.id}/>}></Route>
             <Route path="/Manage" element={<Manage names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners}/>}>
-              <Route path="MyCollection" element={<MyCollection priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners}/>}></Route>
-              <Route path="OnMarket" element={<OnMarket priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners}/>}></Route>
+              <Route path="MyCollection" element={<MyCollection likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners}/>}></Route>
+              <Route path="OnMarket" element={<OnMarket likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners}/>}></Route>
             </Route>
-            <Route path="/Create" element={<Create mint={this.mint} sell={this.sell} buy={this.buy} changePrice={this.changePrice} sellCancel={this.sellCancel} akos={this.state.akos} />}></Route>
+            <Route path="/Create" element={<Create mint={this.mint} sell={this.sell}  changePrice={this.changePrice} sellCancel={this.sellCancel} akos={this.state.akos} />}></Route>
           </Routes>
           <Footer />
         </BrowserRouter>
