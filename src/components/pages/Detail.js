@@ -48,14 +48,20 @@ class Detail extends Component {
                     <img src="./images/eth.png" alt='eth-icon' width="15" height="25" />
                     &nbsp;
                     {this.props.price}
+                    {<div>❤️ {this.props.likes[this.props.id]}</div>}
                 </div>
 
                 <div className="buy">
+
+
+
+
                     {(this.props.owners[this.props.id] !== this.props.account) && <button onClick={() => {
                         this.plusLike(this.props.id + 1)
+                        window.location.replace("/Market")
                     }
 
-                    }><span role={'img'}>❤️</span>좋아요</button>}
+                    }>좋아요</button>}
 
 
                     &nbsp;

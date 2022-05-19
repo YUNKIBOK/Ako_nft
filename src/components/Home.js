@@ -6,58 +6,53 @@ import React, { Component } from "react";
 import Slider from "react-slick";
 
 export default class Home extends Component {
-    
+
+
     render() {
-      const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 3000,
-        pauseOnHover: true,
-        dotsClass: "slick-dots",
-        arrows: true
-      };
-      
-      return(
-        <div style={{display:"grid"}}>
-            <h3 style={{color:"dimgrey",marginLeft:"30px"}}>Start a whole new trade now.</h3>
-            <div className="container" style={{border:"white"}}>
-                    <div className="box">
+        const settings = {
+            dots: true,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 3000,
+            pauseOnHover: true,
+            dotsClass: "slick-dots",
+            arrows: true
+        };
+
+        return (
+            <div style={{ display: "grid" }}>
+                <div className="container">
+                    <div className="box" style={{ marginTop: "50px" }}>
                         <Slider {...settings} >
                             <div className="circle">
-                                <img src="https://gateway.pinata.cloud/ipfs/QmV3pjVvja23HvKj7FHzzJDkeGevtzy4pJ9YtPytC4xdP8/1.png" alt="rank1" width="200px" height="200px"/>
+                                <img src={this.props.first} alt="rank1" width="300px" height="300px" />
                             </div>
                             <div className="circle">
-                                <img src="https://gateway.pinata.cloud/ipfs/QmV3pjVvja23HvKj7FHzzJDkeGevtzy4pJ9YtPytC4xdP8/2.png" alt="rank2" width="200" height="200"/>
+                                <img src={this.props.second} alt="rank2" width="300px" height="300px" />
                             </div>
                             <div className="circle">
-                                <img src="https://gateway.pinata.cloud/ipfs/QmV3pjVvja23HvKj7FHzzJDkeGevtzy4pJ9YtPytC4xdP8/3.png" alt="rank3" width="200" height="200"/>
+                                <img src={this.props.third} alt="rank3" width="300px" height="300px" />
                             </div>
                             <div className="circle">
-                                <img src="https://gateway.pinata.cloud/ipfs/QmV3pjVvja23HvKj7FHzzJDkeGevtzy4pJ9YtPytC4xdP8/4.png" alt="rank4" width="200" height="200"/>
+                                <img src={this.props.fourth} alt="rank4" width="300px" height="300px" />
                             </div>
                             <div className="circle">
-                                <img src="https://gateway.pinata.cloud/ipfs/QmV3pjVvja23HvKj7FHzzJDkeGevtzy4pJ9YtPytC4xdP8/5.png" alt="rank5" width="200" height="200"/>
+                                <img src={this.props.fifth} alt="rank5" width="300px" height="300px" />
                             </div>
                         </Slider>
-                            <br/><br/>
-                            <Link to="/Market" className="homeBtn">Market</Link>
                     </div>
                     <div className="box">
-                            <Link to="/Manage"><img style={{width:"30vh",height:"30vh"}} src="./images/manage.png" alt="Manage"></img></Link>
-                            <br/><br/>
-                            <Link to="/Manage" className="homeBtn">Manage</Link>
+                        <p className="start">Start a whole new trade.</p>
+                        <h4 style={{ fontWeight: "200" }}>BokSociety is world's cutest marketplace.</h4>
+                        <br /><br />
+                        <Link to="/Create" className="homeBtnC">Create</Link>
+                        <Link to="/Market" className="homeBtn">Market</Link>
                     </div>
-                    <div className="box">
-                            <Link to="/Create"><img style={{width:"30vh",height:"30vh"}} src="./images/create.png" alt="Create"></img></Link>
-                            <br/><br/>
-                            <Link to="/Create" className="homeBtn">Create</Link>
-                    </div>
+                </div>
             </div>
-        </div>
-    );
+        );
     }
-  }
+}

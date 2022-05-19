@@ -13,17 +13,27 @@ class MyCollection extends Component {
                 <div className="row text-center" style={{ height: '600px' }}>
                     {this.props.images.map((uri, key) => {
                         return (
-                            (this.props.owners[key] === this.props.account) &&<div key={key} className="col-md-2 mb-3">
+                            (this.props.owners[key] === this.props.account) && <div key={key} className="col-md-2 mb-3">
                                 <Link to="/Detail">
                                     <div onClick={() => {
                                         this.props.idUpdate(key)
                                         this.props.priceUpdate(key)
                                     }}>
-                                        {(this.props.owners[key] === this.props.account) && <img className='token' src={uri} alt="token"></img>}
-                                        {(this.props.owners[key] === this.props.account) && <div>{this.props.names[key]}</div>}
-                                        {(this.props.owners[key] === this.props.account) && <div>{this.props.likes[key]}</div>}
+                                        <div>
+                                            {(this.props.owners[key] === this.props.account) && <img src={uri} alt="temp" style={{ width: "175px", height: "175px", left: '25px', position: 'absolute' }}></img>}
+                                        </div>
+
+                                        <div style={{ width: "175px", height: "30px", background: "gainsboro", left: '25px', top: '175px', position: 'absolute' }}>
+                                            {(this.props.owners[key] === this.props.account) && <p style={{ float: "left", marginLeft: "10px", marginTop: "3px" }}>{this.props.names[key]}</p>}
+                                            {(this.props.owners[key] === this.props.account) && <p style={{ float: "right", marginRight: "10px", marginTop: "3px" }}>{this.props.likes[key]}</p>}
+                                            {(this.props.owners[key] === this.props.account) && <p style={{ float: "right", marginRight: "5px", marginTop: "3px" }}>❤️</p>}
+                                            {(this.props.owners[key] === this.props.account) && <p style={{ float: "right", marginRight: "10px", marginTop: "3px" }}>{parseInt(this.props.prices[key]._hex, 16)}</p>}
+                                            {(this.props.owners[key] === this.props.account) && <img style={{ float: "right", height: "20px", width: "auto", marginRight: "5px", marginTop: "3px" }} src="./images/eth.png" alt="eth"></img>}
+                                        </div>
                                     </div>
+
                                 </Link>
+
                             </div>
                         )
                     })}

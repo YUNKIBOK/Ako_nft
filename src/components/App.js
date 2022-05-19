@@ -21,6 +21,8 @@ class App extends Component {
     await this.loadWeb3()
     await this.loadBlockchainData()
     await this.callLikes()
+    await this.mostLiked()
+
   }
 
   // web3를 로드하는 함수
@@ -106,25 +108,30 @@ class App extends Component {
     }
   }
 
-  createRow() {
+  static createRow() {
+    const post = {
+      num: 0,
+    };
     fetch("http://localhost:3001/mint", {
       method: "post",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify(),
+      body: JSON.stringify(post),
     })
       .then((res) => res.json())
       .then((json) => {
       });
-  };
+  }
 
 
   mint = (uri) => {
+    
     this.state.contract.methods.mintToken(uri).send({ from: this.state.account })
-    .on('confirmation', function(confNumber, receipt){
-      this.createRow();
-      window.location.replace("/Create")
+      .on('confirmation', function (confNumber, receipt) {
+        App.createRow()
+        
+        window.location.replace("/Create")
         /*this.setState({
           akos: [...this.state.akos, uri]
         })*/
@@ -133,8 +140,8 @@ class App extends Component {
 
   sell = (id, price) => {
     this.state.contract.methods.sellToken(id, price).send({ from: this.state.account })
-    .on('confirmation', function(confNumber, receipt){
-      window.location.replace("/Manage/OnMarket")
+      .on('confirmation', function (confNumber, receipt) {
+        window.location.replace("/Manage/OnMarket")
         /*this.setState({
           prices: [...this.state.prices.slice(0, id), price, ...this.state.prices.slice(id + 1, this.state.totalSupply)],
           approved: [...this.state.approved.slice(0, id), true, ...this.state.approved.slice(id + 1, this.state.totalSupply)]
@@ -143,9 +150,9 @@ class App extends Component {
   }
 
   buy = (id) => {
-    this.state.contract.methods.buyToken(id).send({ from: this.state.account , value: parseInt(this.state.prices[id-1])*1000000000000000000})
-    .on('confirmation', function(confNumber, receipt){
-      window.location.replace("/Manage/MyCollection")
+    this.state.contract.methods.buyToken(id).send({ from: this.state.account, value: parseInt(this.state.prices[id - 1]) * 1000000000000000000 })
+      .on('confirmation', function (confNumber, receipt) {
+        window.location.replace("/Manage/MyCollection")
         /*this.setState({
           prices: [...this.state.prices.slice(0, id), 0, ...this.state.prices.slice(id + 1, this.state.totalSupply)],
           approved: [...this.state.approved.slice(0, id), false, ...this.state.approved.slice(id + 1, this.state.totalSupply)],
@@ -156,8 +163,8 @@ class App extends Component {
 
   changePrice = (id, newPrice) => {
     this.state.contract.methods.changePrice(id, newPrice).send({ from: this.state.account })
-    .on('confirmation', function(confNumber, receipt){
-      window.location.replace("/Manage/OnMarket")
+      .on('confirmation', function (confNumber, receipt) {
+        window.location.replace("/Manage/OnMarket")
         /*this.setState({
           prices: [...this.state.prices.slice(0, id), newPrice, ...this.state.prices.slice(id + 1, this.state.totalSupply)],
         })*/
@@ -166,8 +173,8 @@ class App extends Component {
 
   sellCancel = (id) => {
     this.state.contract.methods.sellCancel(id).send({ from: this.state.account })
-    .on('confirmation', function(confNumber, receipt){
-      window.location.replace("/Manage/OnMarket")
+      .on('confirmation', function (confNumber, receipt) {
+        window.location.replace("/Manage/OnMarket")
         /*this.setState({
           prices: [...this.state.prices.slice(0, id), 0, ...this.state.prices.slice(id + 1, this.state.totalSupply)],
           approved: [...this.state.approved.slice(0, id), false, ...this.state.approved.slice(id + 1, this.state.totalSupply)]
@@ -190,7 +197,13 @@ class App extends Component {
       images: [],
       id: 0,
       price: 0,
-      likes: []
+      likes: [],
+      first: './images/4.png',
+      second: './images/14.png',
+      third: './images/36.png',
+      fourth: './images/40.png',
+      fifth: './images/95.png',
+      temp: []
     }
   }
 
@@ -200,14 +213,41 @@ class App extends Component {
     });
   };
 
-  priceUpdate= (key) => {
+  priceUpdate = (key) => {
     this.setState({
       price: parseInt(this.state.prices[key]._hex, 16)
     });
   };
 
-  likesUpdate=(value) => {
-    this.setState({likes: [...this.state.likes, value]});
+  likesUpdate = (value) => {
+    this.setState({
+      likes: [...this.state.likes, value]
+    });
+  };
+
+  firstUpdate = (value) => {
+    this.setState({ first: value });
+  }
+
+  secondUpdate = (value) => {
+    this.setState({ second: value });
+  }
+
+  thirdUpdate = (value) => {
+    this.setState({ third: value });
+  }
+
+  fourthUpdate = (value) => {
+    this.setState({ fourth: value });
+  }
+
+  fifthUpdate = (value) => {
+    this.setState({ fifth: value });
+  }
+
+
+  tempUpdate = (value) => {
+    this.setState({ temp: value });
   }
 
   async callLikes() {
@@ -241,24 +281,78 @@ class App extends Component {
       await this.callLike(j);
     }
     console.log(this.state.likes)
+
   }
 
   async callLike(tokenId) {
-      const post = {
-        id: tokenId,
-      };
-      await fetch("http://localhost:3001/likes", {
-        method: "post",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(post),
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          this.likesUpdate(json.likes)
-        });
+    const post = {
+      id: tokenId,
     };
+    await fetch("http://localhost:3001/likes", {
+      method: "post",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(post),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        this.likesUpdate(json.likes)
+      });
+  };
+
+  async callMostLiked() {
+
+    await fetch("http://localhost:3001/mostlikes", {
+      method: "post",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        this.tempUpdate(json)
+        console.log(this.state.temp)
+      });
+  };
+
+  async mostLiked() {
+    await this.callMostLiked()
+    for (var i = 0; i < this.state.totalSupply; i++) {
+      switch (i) {
+        case 0:  // if (x === 'value1')
+          this.firstUpdate(this.state.images[this.state.temp[i].id - 1])
+          console.log(this.state.first)
+          //console.log(this.state.temp[0])
+          break
+        case 1:  // if (x === 'value1')
+          this.secondUpdate(this.state.images[this.state.temp[i].id - 1])
+          console.log(this.state.second)
+          //console.log(this.state.temp[0])
+          break
+        case 2:  // if (x === 'value1')
+          this.thirdUpdate(this.state.images[this.state.temp[i].id - 1])
+          console.log(this.state.third)
+          //console.log(this.state.temp[0])
+          break
+        case 3:  // if (x === 'value1')
+          this.fourthUpdate(this.state.images[this.state.temp[i].id - 1])
+          console.log(this.state.fourth)
+          //console.log(this.state.temp[0])
+          break
+        case 4:  // if (x === 'value1')
+          this.fifthUpdate(this.state.images[this.state.temp[i].id - 1])
+          console.log(this.state.fifth)
+          //console.log(this.state.temp[0])
+          break
+        default:
+          break
+
+      }
+    }
+  }
+
 
 
 
@@ -266,16 +360,16 @@ class App extends Component {
     return (
       <div className='App'>
         <BrowserRouter>
-          <Header account={this.state.account}/>
+          <Header account={this.state.account} />
           <Routes>
-            <Route path="/" element={<Home />}></Route>
-            <Route path="/Detail" element={<Detail account={this.state.account} owners={this.state.owners} approved={this.state.approved} sell={this.sell}  changePrice={this.changePrice} sellCancel={this.sellCancel} akos={this.state.akos} buy={this.buy} likes={this.state.likes} id={this.state.id} names={this.state.names} images={this.state.images} descriptions={this.state.descriptions} price={this.state.price}/>}></Route>
-            <Route path="/Market" element={<Market likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} id={this.state.id}/>}></Route>
-            <Route path="/Manage" element={<Manage names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners}/>}>
-              <Route path="MyCollection" element={<MyCollection likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners}/>}></Route>
-              <Route path="OnMarket" element={<OnMarket likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners}/>}></Route>
+            <Route path="/" element={<Home images={this.state.images} first={this.state.first} second={this.state.second} third={this.state.third} fourth={this.state.fourth} fifth={this.state.fifth} />}></Route>
+            <Route path="/Detail" element={<Detail account={this.state.account} owners={this.state.owners} approved={this.state.approved} sell={this.sell} changePrice={this.changePrice} sellCancel={this.sellCancel} akos={this.state.akos} buy={this.buy} likes={this.state.likes} id={this.state.id} names={this.state.names} images={this.state.images} descriptions={this.state.descriptions} price={this.state.price} />}></Route>
+            <Route path="/Market" element={<Market prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} id={this.state.id} />}></Route>
+            <Route path="/Manage" element={<Manage names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners} />}>
+              <Route path="MyCollection" element={<MyCollection prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners} />}></Route>
+              <Route path="OnMarket" element={<OnMarket prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners} />}></Route>
             </Route>
-            <Route path="/Create" element={<Create mint={this.mint} sell={this.sell}  changePrice={this.changePrice} sellCancel={this.sellCancel} akos={this.state.akos} />}></Route>
+            <Route path="/Create" element={<Create mint={this.mint} sell={this.sell} changePrice={this.changePrice} sellCancel={this.sellCancel} akos={this.state.akos} />}></Route>
           </Routes>
           <Footer />
         </BrowserRouter>

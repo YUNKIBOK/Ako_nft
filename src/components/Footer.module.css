@@ -1,8 +1,16 @@
 footer{
     position: absolute;
     bottom: 0;
-    height: fit-content;
-    color: black;
-    background: lightgray;
+    height: 110px;
+    color: #212121;
+    background: #d3d3d3;
     width: 100%;
+}
+
+h6{
+    margin-top: 30px;
+}
+
+.logo{
+    margin-top: 30px;
 }
