@@ -18,7 +18,7 @@ class Header extends Component {
                                 {(this.props.account !== '') && <div style={{ color: "white", marginLeft: "50px" }}>welcome! {this.props.account}</div>}
                             </li>
                             <li>
-                                <a style={{ color: "white", marginLeft: "50px" }} href='/Market'>Market</a>
+                                <a style={{ color: "white", marginLeft: "50px" }} href='/Market/OrderByLikes'>Market</a>
                             </li>
                             <li>
                                 <a style={{ color: "white", marginLeft: "50px" }} href='/Manage/MyCollection'>Manage</a>

@@ -13,6 +13,8 @@ import Create from './pages/Create'
 import Detail from './pages/Detail'
 import MyCollection from './managePages/MyCollection';
 import OnMarket from './managePages/OnMarket';
+import OrderByLikes from './marketPages/OrderByLikes';
+import OrderByCreation from './marketPages/OrderByCreation';
 
 class App extends Component {
 
@@ -22,6 +24,8 @@ class App extends Component {
     await this.loadBlockchainData()
     await this.callLikes()
     await this.mostLiked()
+    await this.orderByLikesId()
+    await this.orderByCreationId()
 
   }
 
@@ -203,7 +207,11 @@ class App extends Component {
       third: './images/36.png',
       fourth: './images/40.png',
       fifth: './images/95.png',
-      temp: []
+      temp: [], // 가장 인기 있는 토큰들의 아이디를 저장하는 임시 저장소 
+      orderByLikes: [],
+      orderByLikesid: [],
+      orderByCreation: [],
+      orderByCreationid: [],
     }
   }
 
@@ -224,6 +232,7 @@ class App extends Component {
       likes: [...this.state.likes, value]
     });
   };
+
 
   firstUpdate = (value) => {
     this.setState({ first: value });
@@ -356,6 +365,77 @@ class App extends Component {
 
 
 
+
+  orderByLikesUpdate = (value) => {
+    this.setState({
+      orderByLikes: value
+    });
+  };
+
+  async orderByLikesId() {
+    await this.callOrderByLikes()
+    for (var i = 0; i < this.state.totalSupply; i++) {
+      this.setState({
+        orderByLikesid:[...this.state.orderByLikesid, this.state.orderByLikes[i].id]
+      })
+
+      }
+    }
+  
+
+  async callOrderByLikes() {
+
+    await fetch("http://localhost:3001/orderbylikes", {
+      method: "post",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        this.orderByLikesUpdate(json)
+        console.log(this.state.orderByLikes)
+      });
+  };
+
+
+
+  orderByCreationUpdate = (value) => {
+    this.setState({
+      orderByCreation: value
+    });
+  };
+
+  async orderByCreationId() {
+    await this.callOrderByCreation()
+    for (var i = 0; i < this.state.totalSupply; i++) {
+      this.setState({
+        orderByCreationid:[...this.state.orderByCreationid, this.state.orderByCreation[i].id]
+      })
+
+      }
+    }
+  
+
+  async callOrderByCreation() {
+
+    await fetch("http://localhost:3001/orderbyCreation", {
+      method: "post",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        this.orderByCreationUpdate(json)
+        console.log(this.state.orderByCreation)
+      });
+  };
+
+
+
   render() {
     return (
       <div className='App'>
@@ -364,8 +444,11 @@ class App extends Component {
           <Routes>
             <Route path="/" element={<Home images={this.state.images} first={this.state.first} second={this.state.second} third={this.state.third} fourth={this.state.fourth} fifth={this.state.fifth} />}></Route>
             <Route path="/Detail" element={<Detail account={this.state.account} owners={this.state.owners} approved={this.state.approved} sell={this.sell} changePrice={this.changePrice} sellCancel={this.sellCancel} akos={this.state.akos} buy={this.buy} likes={this.state.likes} id={this.state.id} names={this.state.names} images={this.state.images} descriptions={this.state.descriptions} price={this.state.price} />}></Route>
-            <Route path="/Market" element={<Market prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} id={this.state.id} />}></Route>
-            <Route path="/Manage" element={<Manage names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners} />}>
+            <Route path="/Market" element={<Market prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} id={this.state.id} />}>
+              <Route path="OrderByLikes" element={<OrderByLikes orderByLikesid={this.state.orderByLikesid} callOrderByLikes={this.callOrderByLikes} orderByLikes={this.state.orderByLikes}  prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} id={this.state.id} />}></Route>
+              <Route path="OrderByCreation" element={<OrderByCreation orderByCreationid={this.state.orderByCreationid} prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} id={this.state.id} />}></Route>
+            </Route>
+            <Route path="/Manage" element={<Manage />}>
               <Route path="MyCollection" element={<MyCollection prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners} />}></Route>
               <Route path="OnMarket" element={<OnMarket prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners} />}></Route>
             </Route>

@@ -96,6 +96,32 @@ app.post("/mostlikes", (req, res) => {
         })
 })
 
+app.post("/orderbylikes", (req, res) => {
+    connection.query("select id from Ako order by likes desc, id desc",
+        function (err, rows, fields) {
+            if (err) {
+                console.log("order by likes load fail");
+                //console.log(err);
+            } else {
+                console.log("order by likes load success");
+                res.send(rows);
+            }
+        })
+})
+
+app.post("/orderbycreation", (req, res) => {
+    connection.query("select id from Ako order by id desc",
+        function (err, rows, fields) {
+            if (err) {
+                console.log("order by likes load fail");
+                //console.log(err);
+            } else {
+                console.log("order by likes load success");
+                res.send(rows);
+            }
+        })
+})
+
 app.listen(port, () => {
     console.log(`Connect at http://localhost:${port}`);
 })

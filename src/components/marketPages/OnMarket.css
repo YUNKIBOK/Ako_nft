@@ -1,0 +1,12 @@
+.token {
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .row{
+    margin-left: 0px;
+    margin-right: 0px;
+    overflow: scroll;
+    overflow-x: hidden;
+  }
