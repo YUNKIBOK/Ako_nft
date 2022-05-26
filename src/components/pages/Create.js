@@ -111,48 +111,44 @@ class Create extends Component {
 
     render() {
         return (
-            <div className="container">
-                <div className="left">
-                    <h3>Load an image.</h3>
-                
-                    <br /> &emsp; &emsp; &emsp;
-                    <input type="file" name="imgFile" onChange={(event) => {
-                        event.preventDefault()
-                        const fobj = event.target.files[0]
-                        this.setState({ imgFile: fobj })
-                        this.encodeFileToBase64(event.target.files[0]);
-                    }} />
+            <div style={{height:"81vh"}}>
+                <div className="createContainer">
+                    <div style={{display:"flex"}}>
+                        <div className="createLeft">
+                            <h2 style={{position:"absolute",left:"20%",textDecoration:"underline",textDecorationColor:"midnightblue"}}>Create your NFT.</h2>
+                            <input style={{position:"absolute",right:"23%",top:"22%"}} type="file" name="imgFile" onChange={(event) => {
+                                event.preventDefault()
+                                const fobj = event.target.files[0]
+                                this.setState({ imgFile: fobj })
+                                this.encodeFileToBase64(event.target.files[0]);
+                            }} />
+                            <div className="createPreview"> {this.state.imgSrc && <img src={this.state.imgSrc} alt="preview-img" width='200px' height='200px' />} </div>
+                        </div>
 
-                    <br /> &emsp; &emsp; &emsp; 
-                    <div className="preview"> {this.state.imgSrc && <img src={this.state.imgSrc} alt="preview-img" width='200' height='200' />} </div>
-                </div>
+                        <div className="createRight">
+                            <div>
+                                <h3>Name</h3>
+                                <input type="text" name="imgName" placeholder="👀" onChange={(event) => {
+                                    event.preventDefault()
+                                    this.setState({ imgName: event.target.value })
+                                }} />
+                            </div>
+                            <br/>
+                            <div>
+                                <h3>Description</h3>
+                                <input type="text" className="createTextbox" name="imgDescription" placeholder="Describe your NFT." onChange={(event) => {
+                                    event.preventDefault()
+                                    this.setState({ imgDescription: event.target.value })
+                                }} />
+                            </div>
 
-                <div className="right">
-                    <div>
-                        <h3>Name</h3>
-                        <input type="text" name="imgName" placeholder="👀" onChange={(event) => {
-                            event.preventDefault()
-                            this.setState({ imgName: event.target.value })
-                        }} />
+                            <br />
+                        </div>
                     </div>
-                    <br/>
-                    <div>
-                        <h3>Description</h3>
-                        <input type="text" className="textbox" name="imgDescription" placeholder="Describe your NFT." onChange={(event) => {
-                            event.preventDefault()
-                            this.setState({ imgDescription: event.target.value })
-                        }} />
-                    </div>
+                    <button className="createButton" onClick={() => {
+                                this.ipfsDynamicMint()
+                    }}>Mint</button>
 
-                    <br />
-                    <div>
-                        <button onClick={() => {
-                            this.ipfsDynamicMint()
-                        }}>Mint</button>
-
-
-
-                    </div>
                 </div>
             </div>
         );

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {Link} from 'react-router-dom';
-import './OnMarket.css';
+import './OrderByCreation.css';
 
 class OrderByCreation extends Component {
 
@@ -8,7 +8,7 @@ class OrderByCreation extends Component {
 
         return (
           <div>
-            <h3>마켓 임시 페이지입니다.</h3>
+            <h3>OrderByCreation 임시 페이지입니다.</h3>
             <div className="row text-center" style={{ height: '700px' }}>
               {this.props.orderByCreationid.map((id, key) => { 
                 return (

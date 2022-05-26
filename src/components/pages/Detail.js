@@ -48,7 +48,7 @@ class Detail extends Component {
                     <img src="./images/eth.png" alt='eth-icon' width="15" height="25" />
                     &nbsp;
                     {this.props.price}
-                    {<div>❤️ {this.props.likes[this.props.id]}</div>}
+                    {<div><span role="img" aria-label="heart">❤️</span> {this.props.likes[this.props.id]}</div>}
                 </div>
 
                 <div className="buy">

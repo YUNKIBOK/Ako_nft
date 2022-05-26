@@ -1,13 +1,19 @@
 .token {
-    height: 150px;
-    width: 150px;
-    border-radius: 50%;
-    display: inline-block;
-  }
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  display: inline-block;
+}
 
-  .manageMenu{
-    background:lightgray;
-    padding: 8px;
-    border-radius: 10px;
-    margin-right: 1px;
+.manageMenu{
+  background:#2081E2;
+  padding: 8px;
+  border-radius: 10px;
+  margin-right: 1px;
+}
+
+.manageContainer{
+height: 90%;
+width:100%;
+margin-top: 3%;
 }

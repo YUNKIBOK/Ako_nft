@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import './MyCollection.css';
+import './OrderByLikes.css';
 
 
 
@@ -14,7 +14,7 @@ class OrderByLikes extends Component {
 
         return (
           <div>
-            <h3>마켓 임시 페이지입니다.</h3>
+            <h3>OrderByLikes 임시 페이지입니다.</h3>
             <div className="row text-center" style={{ height: '700px' }}>
               {this.props.orderByLikesid.map((id, key) => { 
                 return (

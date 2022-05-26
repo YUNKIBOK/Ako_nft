@@ -7,14 +7,15 @@ import Ako from '../abis/Ako.json'
 import Header from './Header';
 import Home from './Home'
 import Footer from './Footer'
-import Market from './pages/Market'
+//import Market from './pages/Market'
+import Market from './pages/Market_original'
 import Manage from './pages/Manage'
 import Create from './pages/Create'
 import Detail from './pages/Detail'
 import MyCollection from './managePages/MyCollection';
 import OnMarket from './managePages/OnMarket';
-import OrderByLikes from './marketPages/OrderByLikes';
-import OrderByCreation from './marketPages/OrderByCreation';
+//import OrderByLikes from './marketPages/OrderByLikes';
+//import OrderByCreation from './marketPages/OrderByCreation';
 
 class App extends Component {
 
@@ -55,24 +56,24 @@ class App extends Component {
     // 계정을 가져오고 세팅한다
     const accounts = await web3.eth.getAccounts()
     this.setState({ account: accounts[0] })
-    console.log(this.state.account)
+    console.log('account: '+this.state.account)
 
     const networkId = await web3.eth.net.getId()
     const networkData = Ako.networks[networkId]
     if (networkData) {
       const abi = Ako.abi
       const address = networkData.address
-      console.log(address)
+      console.log('contract: '+address)
 
       // 컨트랙트를 가져오고 세팅한다
       const contract = new web3.eth.Contract(abi, address)
       this.setState({ contract: contract })
-      console.log(this.state.contract)
+      //console.log('contract object: '+this.state.contract)
 
       // 전체 토큰 수를 가져오고 세팅한다
       const totalSupply = await contract.methods.totalSupply().call()
       this.setState({ totalSupply: totalSupply })
-      console.log(this.state.totalSupply)
+      console.log('total supply: '+this.state.totalSupply)
 
       // 전체 토큰의 id와 URI를 프론트 단에서 배열화한다
       for (var j = 1; j <= totalSupply; j++) {
@@ -87,16 +88,20 @@ class App extends Component {
           owners: [...this.state.owners, owner],
         })
       }
+      console.log('----------json uri----------')
       console.log(this.state.akos)
+      console.log('----------price----------')
       console.log(this.state.prices)
+      console.log('----------sale----------')
       console.log(this.state.approved)
+      console.log('----------owner----------')
       console.log(this.state.owners)
 
       for (var i = 0; i < totalSupply; i++) {
-        console.log("Fetching JSON data...");
+        //console.log("Fetching JSON data...");
         await this.getJSON(this.state.akos[i])
           .then(data => {
-            console.log(data)
+            //console.log(data)
             this.setState({
               names: [...this.state.names, data["name"]],
               descriptions: [...this.state.descriptions, data["description"]],
@@ -104,9 +109,9 @@ class App extends Component {
             })
           });
       }
-      console.log(this.state.names)
-      console.log(this.state.descriptions)
-      console.log(this.state.images)
+      //console.log(this.state.names)
+      //console.log(this.state.descriptions)
+      //console.log(this.state.images)
     } else {
       window.alert('Smart contract not deployed to detected network.')
     }
@@ -285,12 +290,12 @@ class App extends Component {
         .then((json) => {
         });*/
 
-    console.log('callLikes 시작');
+    //console.log('callLikes 시작');
     for (var j = 1; j <= this.state.totalSupply; j++) {
       await this.callLike(j);
     }
+    console.log('----------like----------')
     console.log(this.state.likes)
-
   }
 
   async callLike(tokenId) {
@@ -322,6 +327,7 @@ class App extends Component {
       .then((res) => res.json())
       .then((json) => {
         this.tempUpdate(json)
+        console.log('----------most liked id top 5----------')
         console.log(this.state.temp)
       });
   };
@@ -332,27 +338,27 @@ class App extends Component {
       switch (i) {
         case 0:  // if (x === 'value1')
           this.firstUpdate(this.state.images[this.state.temp[i].id - 1])
-          console.log(this.state.first)
+          console.log('most liked image uri top 1:' +this.state.first)
           //console.log(this.state.temp[0])
           break
         case 1:  // if (x === 'value1')
           this.secondUpdate(this.state.images[this.state.temp[i].id - 1])
-          console.log(this.state.second)
+          console.log('most liked image uri top 2:' +this.state.second)
           //console.log(this.state.temp[0])
           break
         case 2:  // if (x === 'value1')
           this.thirdUpdate(this.state.images[this.state.temp[i].id - 1])
-          console.log(this.state.third)
+          console.log('most liked image uri top 3:' +this.state.third)
           //console.log(this.state.temp[0])
           break
         case 3:  // if (x === 'value1')
           this.fourthUpdate(this.state.images[this.state.temp[i].id - 1])
-          console.log(this.state.fourth)
+          console.log('most liked image uri top 4:' +this.state.fourth)
           //console.log(this.state.temp[0])
           break
         case 4:  // if (x === 'value1')
           this.fifthUpdate(this.state.images[this.state.temp[i].id - 1])
-          console.log(this.state.fifth)
+          console.log('most liked image uri top 5:' +this.state.fifth)
           //console.log(this.state.temp[0])
           break
         default:
@@ -395,6 +401,7 @@ class App extends Component {
       .then((res) => res.json())
       .then((json) => {
         this.orderByLikesUpdate(json)
+        console.log('----------id order by like----------')
         console.log(this.state.orderByLikes)
       });
   };
@@ -430,6 +437,7 @@ class App extends Component {
       .then((res) => res.json())
       .then((json) => {
         this.orderByCreationUpdate(json)
+        console.log('----------id order by creation----------')
         console.log(this.state.orderByCreation)
       });
   };
@@ -445,9 +453,11 @@ class App extends Component {
             <Route path="/" element={<Home images={this.state.images} first={this.state.first} second={this.state.second} third={this.state.third} fourth={this.state.fourth} fifth={this.state.fifth} />}></Route>
             <Route path="/Detail" element={<Detail account={this.state.account} owners={this.state.owners} approved={this.state.approved} sell={this.sell} changePrice={this.changePrice} sellCancel={this.sellCancel} akos={this.state.akos} buy={this.buy} likes={this.state.likes} id={this.state.id} names={this.state.names} images={this.state.images} descriptions={this.state.descriptions} price={this.state.price} />}></Route>
             <Route path="/Market" element={<Market prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} id={this.state.id} />}>
+              {/*
               <Route path="OrderByLikes" element={<OrderByLikes orderByLikesid={this.state.orderByLikesid} callOrderByLikes={this.callOrderByLikes} orderByLikes={this.state.orderByLikes}  prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} id={this.state.id} />}></Route>
               <Route path="OrderByCreation" element={<OrderByCreation orderByCreationid={this.state.orderByCreationid} prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} id={this.state.id} />}></Route>
-            </Route>
+              */}
+              </Route>
             <Route path="/Manage" element={<Manage />}>
               <Route path="MyCollection" element={<MyCollection prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners} />}></Route>
               <Route path="OnMarket" element={<OnMarket prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners} />}></Route>

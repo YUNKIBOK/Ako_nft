@@ -23,10 +23,10 @@ export default class Home extends Component {
         };
 
         return (
-            <div style={{ display: "grid" }}>
-                <div className="container">
-                    <div className="box" style={{ marginTop: "50px" }}>
-                        <Slider {...settings} >
+            <div style={{ display: "grid", height:"81vh"}}>
+                <div className="homeContainer">
+                    <div className="homeLeft">
+                        <Slider {...settings} style={{marginRight:"8%"}}>
                             <div className="circle">
                                 <img src={this.props.first} alt="rank1" width="300px" height="300px" />
                             </div>
@@ -44,12 +44,14 @@ export default class Home extends Component {
                             </div>
                         </Slider>
                     </div>
-                    <div className="box">
+                    <div className="homeRight">
                         <p className="start">Start a whole new trade.</p>
                         <h4 style={{ fontWeight: "200" }}>BokSociety is world's cutest marketplace.</h4>
                         <br /><br />
-                        <Link to="/Create" className="homeBtnC">Create</Link>
-                        <Link to="/Market" className="homeBtn">Market</Link>
+                        <div style={{display:"flex",alignItems:"center",marginTop:"3%"}}>
+                            <Link to="/Create" className="homeBtnC">Create</Link>
+                            <Link to="/Market" className="homeBtn">Market</Link>
+                        </div>
                     </div>
                 </div>
             </div>

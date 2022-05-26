@@ -1,0 +1,17 @@
+.headerUl{
+    display: flex;
+    list-style: none;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    right: 3%;
+    transform: translate(0,-50%);
+}
+
+.bokLogo{
+    color:white;
+    position: absolute;
+    top: 50%;
+    left: 3%;
+    transform: translate(0,-50%);
+}
