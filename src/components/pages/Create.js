@@ -23,8 +23,8 @@ class Create extends Component {
 
         //피나타 pinFileToIPFS API 시작
         // call the keys from .env
-        const API_KEY = '8618f1c88153859c1e84'
-        const API_SECRET = '4d7c1aa926aa4f043113fc700665eaf531e3abfa69cc1a057035178a7397520d'
+        const API_KEY = '4c5ac6d90cd1cc22e856'
+        const API_SECRET = '86b626e2ea379fec6965500c347d7e799df5a5ec416085bb57591e881a22569a'
 
         // the endpoint needed to upload the file
         const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`
@@ -116,7 +116,7 @@ class Create extends Component {
                     <div style={{display:"flex"}}>
                         <div className="createLeft">
                             <h2 style={{position:"absolute",left:"20%",textDecoration:"underline",textDecorationColor:"midnightblue"}}>Create your NFT.</h2>
-                            <input style={{position:"absolute",right:"23%",top:"22%"}} type="file" name="imgFile" onChange={(event) => {
+                            <input style={{position:"absolute",left:"45%",top:"22%"}} type="file" name="imgFile" onChange={(event) => {
                                 event.preventDefault()
                                 const fobj = event.target.files[0]
                                 this.setState({ imgFile: fobj })

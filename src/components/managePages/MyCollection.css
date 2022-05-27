@@ -4,9 +4,10 @@
     border-radius: 50%;
     display: inline-block;
   }
-  .row{
-    margin-left: 0px;
-    margin-right: 0px;
+.row{
     overflow: scroll;
     overflow-x: hidden;
+    width: 90%;
+    position:absolute;
+    left: 10%;
   }

@@ -25,38 +25,23 @@ class Detail extends Component {
     render() {
         return (
             <div className="page_container">
-                <h1>상세페이지</h1>
+
                 <div className="page_left">
-                    <h2>{this.props.names[this.props.id]}</h2>
-                    <img src={this.props.images[this.props.id]} alt="Ako" width="250" height="250" />
-                    <br />
-                    <hr className="line"></hr>
-                    current price<br />
+                    <img src={this.props.images[this.props.id]} alt="Ako" width="600px" height="600px" />
                 </div>
 
                 <div className="page_right">
                     <br /><br /><br />
-                    <h3>Description</h3>
+                    <h1>{this.props.names[this.props.id]}</h1>
+                    <h3 style={{textDecoration:"underline",marginTop:"5%"}}>Description</h3>
                     <div className="description_box">
                         {this.props.descriptions[this.props.id]}
                     </div>
-                    <br />
-                </div>
-
-
-                <div className="price">
-                    <img src="./images/eth.png" alt='eth-icon' width="15" height="25" />
+                    
                     &nbsp;
-                    {this.props.price}
+                    <div style={{fontSize:"40px",marginBottom:"5%"}}><img src="./images/eth.png" alt='eth-icon' width="auto" height="40px" />&nbsp;{this.props.price}</div>
                     {<div><span role="img" aria-label="heart">❤️</span> {this.props.likes[this.props.id]}</div>}
-                </div>
-
-                <div className="buy">
-
-
-
-
-                    {(this.props.owners[this.props.id] !== this.props.account) && <button onClick={() => {
+                    {(this.props.owners[this.props.id] !== this.props.account) && <button className="likeBtn" onClick={() => {
                         this.plusLike(this.props.id + 1)
                         window.location.replace("/Market")
                     }
@@ -85,7 +70,19 @@ class Detail extends Component {
 {(this.props.approved[this.props.id]===true)&&(this.props.owners[this.props.id] === this.props.account) &&<button onClick={() => {
                         this.props.sellCancel(this.props.id + 1)
                     }}>판매 취소</button>}
+
                 </div>
+
+
+                
+
+               
+
+
+
+
+                    
+   
 
 
             </div>

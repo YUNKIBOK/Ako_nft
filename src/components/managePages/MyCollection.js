@@ -9,7 +9,6 @@ class MyCollection extends Component {
     render() {
         return (
             <div>
-                <h3>MyCollection 임시 페이지입니다.</h3>
                 <div className="row text-center" style={{ height: '600px' }}>
                     {this.props.images.map((uri, key) => {
                         return (
