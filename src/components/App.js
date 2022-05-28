@@ -7,15 +7,15 @@ import Ako from '../abis/Ako.json'
 import Header from './Header';
 import Home from './Home'
 import Footer from './Footer'
-//import Market from './pages/Market'
-import Market from './pages/Market_original'
+import Market from './pages/Market'
+//import Market from './pages/Market_original'
 import Manage from './pages/Manage'
 import Create from './pages/Create'
 import Detail from './pages/Detail'
 import MyCollection from './managePages/MyCollection';
 import OnMarket from './managePages/OnMarket';
-//import OrderByLikes from './marketPages/OrderByLikes';
-//import OrderByCreation from './marketPages/OrderByCreation';
+import OrderByLikes from './marketPages/OrderByLikes';
+import OrderByCreation from './marketPages/OrderByCreation';
 
 class App extends Component {
 
@@ -453,10 +453,10 @@ class App extends Component {
             <Route path="/" element={<Home images={this.state.images} first={this.state.first} second={this.state.second} third={this.state.third} fourth={this.state.fourth} fifth={this.state.fifth} />}></Route>
             <Route path="/Detail" element={<Detail account={this.state.account} owners={this.state.owners} approved={this.state.approved} sell={this.sell} changePrice={this.changePrice} sellCancel={this.sellCancel} akos={this.state.akos} buy={this.buy} likes={this.state.likes} id={this.state.id} names={this.state.names} images={this.state.images} descriptions={this.state.descriptions} price={this.state.price} />}></Route>
             <Route path="/Market" element={<Market prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} id={this.state.id} />}>
-              {/*
+
               <Route path="OrderByLikes" element={<OrderByLikes orderByLikesid={this.state.orderByLikesid} callOrderByLikes={this.callOrderByLikes} orderByLikes={this.state.orderByLikes}  prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} id={this.state.id} />}></Route>
               <Route path="OrderByCreation" element={<OrderByCreation orderByCreationid={this.state.orderByCreationid} prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} id={this.state.id} />}></Route>
-              */}
+              
               </Route>
             <Route path="/Manage" element={<Manage />}>
               <Route path="MyCollection" element={<MyCollection prices={this.state.prices} likes={this.state.likes} priceUpdate={this.priceUpdate} idUpdate={this.idUpdate} names={this.state.names} images={this.state.images} approved={this.state.approved} account={this.state.account} owners={this.state.owners} />}></Route>
