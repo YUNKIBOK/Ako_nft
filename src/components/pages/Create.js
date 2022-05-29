@@ -136,10 +136,10 @@ class Create extends Component {
                             <br/>
                             <div>
                                 <h3>Description</h3>
-                                <input type="text" className="createTextbox" name="imgDescription" placeholder="Describe your NFT." onChange={(event) => {
+                                <textarea className="createTextbox" name="imgDescription" placeholder="Describe your NFT." onChange={(event) => {
                                     event.preventDefault()
                                     this.setState({ imgDescription: event.target.value })
-                                }} />
+                                }} ></textarea>
                             </div>
 
                             <br />

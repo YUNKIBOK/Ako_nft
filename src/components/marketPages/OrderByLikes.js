@@ -14,8 +14,7 @@ class OrderByLikes extends Component {
 
         return (
           <div>
-            <h3>OrderByLikes 임시 페이지입니다.</h3>
-            <div className="row text-center" style={{ height: '700px' }}>
+            <div className="row" style={{ height: '65vh' }}>
               {this.props.orderByLikesid.map((id, key) => { 
                 return (
                     this.props.approved[id-1] && <div key={key} className="col-md-2 mb-3">
@@ -24,16 +23,18 @@ class OrderByLikes extends Component {
                         this.props.idUpdate(id-1)
                         this.props.priceUpdate(id-1)
                       }}>
+                        {/*}
                         <div>
                         {this.props.approved[id-1] && <img src={this.props.images[id-1]} alt="temp" style={{ width: "200px", height: "200px" ,left:'50px', position:'absolute'}}></img>}
-                        </div>
+                    </div>*/}
     
-                        <div style={{ width: "200px", height: "30px", background: "gainsboro", left:'50px', top:'200px',position:'absolute'}}>
-                          {this.props.approved[id-1] && <p style={{ float: "left", marginLeft: "10px", marginTop: "3px" }}>{this.props.names[id-1]}</p>}
-                          {this.props.approved[id-1] && <p style={{ float: "right", marginRight: "10px", marginTop: "3px" }}>{this.props.likes[id-1]}</p>}
-                          {this.props.approved[id-1] && <p style={{ float: "right", marginRight: "5px", marginTop: "3px" }}>❤️</p>}
-                          {this.props.approved[id-1] && <p style={{ float: "right", marginRight: "10px", marginTop: "3px" }}>{parseInt(this.props.prices[id-1]._hex, 16)}</p>}
-                          {this.props.approved[id-1] && <img style={{ float: "right", height: "20px", width: "auto", marginRight: "5px", marginTop: "3px" }} src="../images/eth.png" alt="eth"></img>}
+                        <div style={{ width: "220px", height: "265px", background: "gainsboro", position:'relative',left: '15px'}}>
+                          {this.props.approved[id-1] && <div style={{ overflow: "hidden", whiteSpace:"nowrap", textOverflow:"ellipsis", width: "200px", float: "left", marginLeft: "10px", marginTop: "3px" }}>#{id} {this.props.names[id-1]}</div>}<br/>
+                          {this.props.approved[id-1] && <img src={this.props.images[id-1]} alt="temp" style={{ width: "200px", height: "200px" ,left:'10px', marginTop: '5px', position:'absolute'}}></img>}
+                          {this.props.approved[id-1] && <div style={{ float: "right", marginRight: "10px", marginTop: "210px" }}>{this.props.likes[id-1]}</div>}
+                          {this.props.approved[id-1] && <div style={{ float: "right", marginRight: "5px", marginTop: "210px" }}>❤️</div>}
+                          {this.props.approved[id-1] && <div style={{ float: "right", marginRight: "10px", marginTop: "210px" }}>{parseInt(this.props.prices[id-1]._hex, 16)}</div>}
+                          {this.props.approved[id-1] && <img style={{ float: "right", height: "20px", width: "auto", marginRight: "5px", marginTop: "210px" }} src="../images/eth.png" alt="eth"></img>}
                         </div>
                         </div>
                 

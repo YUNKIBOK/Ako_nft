@@ -50,7 +50,7 @@ export default class Home extends Component {
                         <br /><br />
                         <div style={{display:"flex",alignItems:"center",marginTop:"3%"}}>
                             <Link to="/Create" className="homeBtnC">Create</Link>
-                            <Link to="/Market" className="homeBtn">Market</Link>
+                            <Link to="/Market/OrderByLikes" className="homeBtn">Market</Link>
                         </div>
                     </div>
                 </div>

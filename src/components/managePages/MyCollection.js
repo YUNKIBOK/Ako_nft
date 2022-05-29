@@ -9,7 +9,7 @@ class MyCollection extends Component {
     render() {
         return (
             <div>
-                <div className="row text-center" style={{ height: '600px' }}>
+                <div className="row" style={{ height: '65vh' }}>
                     {this.props.images.map((uri, key) => {
                         return (
                             (this.props.owners[key] === this.props.account) && <div key={key} className="col-md-2 mb-3">
@@ -22,8 +22,8 @@ class MyCollection extends Component {
                                             {(this.props.owners[key] === this.props.account) && <img src={uri} alt="temp" style={{ width: "175px", height: "175px", left: '25px', position: 'absolute' }}></img>}
                                 </div>*/}
 
-                                        <div style={{ width: "220px", height: "265px", background: "gainsboro", position:'relative'}}>
-                                            {this.props.owners[key] && <div style={{ float: "left", marginLeft: "10px", marginTop: "3px" }}>#{key+1} {this.props.names[key]}</div>}<br/>
+                                        <div style={{ width: "220px", height: "265px", background: "gainsboro", position:'relative', left: '15px'}}>
+                                            {this.props.owners[key] && <div style={{ overflow: "hidden", whiteSpace:"nowrap", textOverflow:"ellipsis", width: "200px", float: "left", marginLeft: "10px", marginTop: "3px" }}>#{key+1} {this.props.names[key]}</div>}<br/>
                                             {this.props.owners[key] && <img src={this.props.images[key]} alt="temp" style={{ width: "200px", height: "200px" ,left:'10px', marginTop: '5px', position:'absolute'}}></img>}
                                             {this.props.owners[key] && <div style={{ float: "right", marginRight: "10px", marginTop: "210px" }}>{this.props.likes[key]}</div>}
                                             {this.props.owners[key] && <div style={{ float: "right", marginRight: "5px", marginTop: "210px" }}>❤️</div>}

@@ -140,7 +140,7 @@ class App extends Component {
       .on('confirmation', function (confNumber, receipt) {
         App.createRow()
         
-        window.location.replace("/Create")
+        window.location.replace("/Manage/MyCollection")
         /*this.setState({
           akos: [...this.state.akos, uri]
         })*/

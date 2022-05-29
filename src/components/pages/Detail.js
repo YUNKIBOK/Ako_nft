@@ -25,18 +25,18 @@ class Detail extends Component {
     render() {
         return (
             <div className="page_container">
-
                 <div className="page_left">
-                    <img src={this.props.images[this.props.id]} alt="Ako" width="600px" height="600px" />
+                    <img src={this.props.images[this.props.id]} alt="Ako" width="600px" height="600px" style={{ borderRadius: "10%"}}/>
                 </div>
 
                 <div className="page_right">
                     <br /><br /><br />
-                    <h1>#{this.props.id+1} {this.props.names[this.props.id]}</h1>
-                    <h3 style={{textDecoration:"underline",marginTop:"5%"}}>Description</h3>
-                    <div className="description_box">
+                    <h1>#{this.props.id+1}</h1>
+                    <pre style={{ fontSize: "xx-large", width: "60%"}}>{this.props.names[this.props.id]}</pre>
+                    {/*<h3 style={{textDecoration:"underline",marginTop:"5%"}}>Description</h3>*/}
+                    <pre className="description_box">
                         {this.props.descriptions[this.props.id]}
-                    </div>
+                    </pre>
                     
                     &nbsp;
                     <div style={{fontSize:"40px",marginBottom:"5%"}}><img src="./images/eth.png" alt='eth-icon' width="auto" height="40px" />&nbsp;{this.props.price}</div>
