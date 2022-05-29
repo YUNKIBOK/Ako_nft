@@ -33,7 +33,7 @@ class OrderByLikes extends Component {
                           {this.props.approved[id-1] && <p style={{ float: "right", marginRight: "10px", marginTop: "3px" }}>{this.props.likes[id-1]}</p>}
                           {this.props.approved[id-1] && <p style={{ float: "right", marginRight: "5px", marginTop: "3px" }}>❤️</p>}
                           {this.props.approved[id-1] && <p style={{ float: "right", marginRight: "10px", marginTop: "3px" }}>{parseInt(this.props.prices[id-1]._hex, 16)}</p>}
-                          {this.props.approved[id-1] && <img style={{ float: "right", height: "20px", width: "auto", marginRight: "5px", marginTop: "3px" }} src="./images/eth.png" alt="eth"></img>}
+                          {this.props.approved[id-1] && <img style={{ float: "right", height: "20px", width: "auto", marginRight: "5px", marginTop: "3px" }} src="../images/eth.png" alt="eth"></img>}
                         </div>
                         </div>
                 

@@ -32,7 +32,7 @@ class Detail extends Component {
 
                 <div className="page_right">
                     <br /><br /><br />
-                    <h1>{this.props.names[this.props.id]}</h1>
+                    <h1>#{this.props.id+1} {this.props.names[this.props.id]}</h1>
                     <h3 style={{textDecoration:"underline",marginTop:"5%"}}>Description</h3>
                     <div className="description_box">
                         {this.props.descriptions[this.props.id]}
