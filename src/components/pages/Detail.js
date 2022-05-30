@@ -26,64 +26,48 @@ class Detail extends Component {
         return (
             <div className="page_container">
                 <div className="page_left">
-                    <img src={this.props.images[this.props.id]} alt="Ako" width="600px" height="600px" style={{ borderRadius: "10%"}}/>
+                    <img src={this.props.images[this.props.id]} alt="Ako" width="80%" height="auto" style={{ borderRadius: "10%"}}/>
                 </div>
 
                 <div className="page_right">
                     <br /><br /><br />
                     <h1>#{this.props.id+1}</h1>
                     <pre style={{ fontSize: "xx-large", width: "60%"}}>{this.props.names[this.props.id]}</pre>
-                    {/*<h3 style={{textDecoration:"underline",marginTop:"5%"}}>Description</h3>*/}
                     <pre className="description_box">
                         {this.props.descriptions[this.props.id]}
                     </pre>
                     
                     &nbsp;
-                    <div style={{fontSize:"40px",marginBottom:"5%"}}><img src="./images/eth.png" alt='eth-icon' width="auto" height="40px" />&nbsp;{this.props.price}</div>
-                    {<div><span role="img" aria-label="heart">❤️</span> {this.props.likes[this.props.id]}</div>}
+                    <div style={{fontSize:"40px",marginBottom:"3%"}}><img src="./images/eth.png" alt='eth-icon' width="auto" height="40px" />&nbsp;{this.props.price}<span role="img" aria-label="heart" style={{fontSize:"40px",marginLeft:"3%"}}>❤️</span>{this.props.likes[this.props.id]}</div>
+                    
+                    {(this.props.approved[this.props.id]===true)&&(this.props.owners[this.props.id] !== this.props.account) &&<button className="buyBtn" onClick={() => {
+                        this.props.buy(this.props.id + 1)
+                    }}>Buy</button>}
+
                     {(this.props.owners[this.props.id] !== this.props.account) && <button className="likeBtn" onClick={() => {
                         this.plusLike(this.props.id + 1)
                         window.location.replace("/Market")
                     }
 
-                    }>좋아요</button>}
+                    }>Like it!</button>}
 
+                    {(this.props.owners[this.props.id] === this.props.account) &&<input type='text' onChange={(e)=>price=e.target.value}></input>}
+                    
+                    &nbsp;
+                    {(this.props.approved[this.props.id]===true)&&(this.props.owners[this.props.id] === this.props.account) &&<button className="buyBtn" onClick={() => {
+                        this.props.changePrice(this.props.id + 1, price )
+                    }}>Change price</button>}
+
+                    &nbsp;&nbsp;&nbsp;
+                    {(this.props.approved[this.props.id]===true)&&(this.props.owners[this.props.id] === this.props.account) &&<button className="cancleBtn" onClick={() => {
+                        this.props.sellCancel(this.props.id + 1)
+                    }}>Cancel listing</button>}
 
                     &nbsp;
-                    {(this.props.approved[this.props.id]===true)&&(this.props.owners[this.props.id] !== this.props.account) &&<button onClick={() => {
-                        this.props.buy(this.props.id + 1)
-                    }}>구매</button>}
-
-{(this.props.owners[this.props.id] === this.props.account) &&<input type='text' onChange={(e)=>price=e.target.value}></input>}
-
-{(this.props.approved[this.props.id]===false)&&(this.props.owners[this.props.id] === this.props.account) &&<button onClick={() => {
+                    {(this.props.approved[this.props.id]===false)&&(this.props.owners[this.props.id] === this.props.account) &&<button className="buyBtn" onClick={() => {
                         this.props.sell(this.props.id + 1, price )
-                    }}>판매</button>}
-
-
-
-{(this.props.approved[this.props.id]===true)&&(this.props.owners[this.props.id] === this.props.account) &&<button onClick={() => {
-                        this.props.changePrice(this.props.id + 1, price )
-                    }}>가격 변경</button>}
-
-
-{(this.props.approved[this.props.id]===true)&&(this.props.owners[this.props.id] === this.props.account) &&<button onClick={() => {
-                        this.props.sellCancel(this.props.id + 1)
-                    }}>판매 취소</button>}
-
+                    }}>Sell</button>}
                 </div>
-
-
-                
-
-               
-
-
-
-
-                    
-   
-
 
             </div>
         );

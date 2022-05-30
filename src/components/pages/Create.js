@@ -23,8 +23,8 @@ class Create extends Component {
 
         //피나타 pinFileToIPFS API 시작
         // call the keys from .env
-        const API_KEY = '4c5ac6d90cd1cc22e856'
-        const API_SECRET = '86b626e2ea379fec6965500c347d7e799df5a5ec416085bb57591e881a22569a'
+        const API_KEY = 'a4d93241a5cf57f2b2cc'
+        const API_SECRET = '41e21a929cd3c1c4cc76e2cbe88472f5c5c4d0c53c0f7a75bd69ece528e0bf48'
 
         // the endpoint needed to upload the file
         const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`
@@ -61,7 +61,7 @@ class Create extends Component {
             url2, {
             name: this.state.imgName,
             description: this.state.imgDescription,
-            image: 'https://gateway.pinata.cloud/ipfs/' + this.state.ipfsHash
+            image: 'https://ako.mypinata.cloud/ipfs/' + this.state.ipfsHash
         },
             {
                 maxContentLength: "Infinity",
@@ -77,7 +77,7 @@ class Create extends Component {
         // get the hash
         this.setState({ ipfsHash: response2.data.IpfsHash })
         console.log(this.state.ipfsHash)
-        const tokenURI = 'https://gateway.pinata.cloud/ipfs/' + this.state.ipfsHash
+        const tokenURI = 'https://ako.mypinata.cloud/ipfs/' + this.state.ipfsHash
 
         //Mint
         this.props.mint(tokenURI);

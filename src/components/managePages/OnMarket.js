@@ -20,7 +20,7 @@ class OnMarket extends Component {
                     {this.props.approved[key] && <img src={uri} alt="temp" style={{ width: "200px", height: "200px" ,left:'50px', position:'absolute'}}></img>}
                 </div>*/}
 
-                    <div style={{ width: "220px", height: "265px", background: "gainsboro", position:'relative', left: '15px'}}>
+<div style={{ width: "220px", height: "265px", position:'relative', left: '15px',border:'solid lightgray 1px',borderRadius:"10px",boxShadow:"10px 5px 5px gray"}}>
                         {this.props.owners[key] && <div style={{ overflow: "hidden", whiteSpace:"nowrap", textOverflow:"ellipsis", width: "200px", float: "left", marginLeft: "10px", marginTop: "3px" }}>#{key+1} {this.props.names[key]}</div>}<br/>
                         {this.props.owners[key] && <img src={this.props.images[key]} alt="temp" style={{ width: "200px", height: "200px" ,left:'10px', marginTop: '5px', position:'absolute'}}></img>}
                         {this.props.owners[key] && <div style={{ float: "right", marginRight: "10px", marginTop: "210px" }}>{this.props.likes[key]}</div>}
