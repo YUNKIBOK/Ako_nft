@@ -9,7 +9,7 @@ class MyCollection extends Component {
     render() {
         return (
             <div>
-                <div className="row" style={{ height: '65vh' }}>
+                <div className="row" style={{ height: '60vh' }}>
                     {this.props.images.map((uri, key) => {
                         return (
                             (this.props.owners[key] === this.props.account) && <div key={key} className="col-md-2 mb-3">

@@ -14,7 +14,7 @@ class OrderByLikes extends Component {
 
         return (
           <div>
-            <div className="row" style={{ height: '65vh' }}>
+            <div className="row" style={{ height: '60vh' }}>
               {this.props.orderByLikesid.map((id, key) => { 
                 return (
                     this.props.approved[id-1] && <div key={key} className="col-md-2 mb-3">

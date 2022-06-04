@@ -33,9 +33,9 @@ class Detail extends Component {
                     <br /><br /><br />
                     <h1>#{this.props.id+1}</h1>
                     <pre style={{ fontSize: "xx-large", width: "60%"}}>{this.props.names[this.props.id]}</pre>
-                    <pre className="description_box">
+                    <div className="description_box">
                         {this.props.descriptions[this.props.id]}
-                    </pre>
+                    </div>
                     
                     &nbsp;
                     <div style={{fontSize:"40px",marginBottom:"3%"}}><img src="./images/eth.png" alt='eth-icon' width="auto" height="40px" />&nbsp;{this.props.price}<span role="img" aria-label="heart" style={{fontSize:"40px",marginLeft:"3%"}}>❤️</span>{this.props.likes[this.props.id]}</div>

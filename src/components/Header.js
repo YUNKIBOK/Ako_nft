@@ -6,7 +6,7 @@ import './Header.css'
 class Header extends Component {
     render() {
         return (
-            <header style={{ display: "flex", background: "midnightblue",height:"9vh",position:"relative"}}>
+            <header style={{ display: "flex", background: "#FF9F45",height:"9vh",position:"relative"}}>
                     <Link to="/">
                         <h2 className='bokLogo'>BokSociety</h2>
                     </Link>

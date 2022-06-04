@@ -7,7 +7,7 @@ class Market extends Component {
 
     render() {
         return (
-            <div style={{height:"81vh"}}>
+            <div style={{height:"75.5vh"}}>
                 <div className="manageContainer">
                     <h2 style={{textDecoration:"underline",textDecorationColor:"midnightblue",marginLeft:"5%"}}>Take a look at NFTs.</h2>
                     <ul style={{display:"flex",listStyle:"none",marginTop:"30px",marginLeft:"4%"}}>

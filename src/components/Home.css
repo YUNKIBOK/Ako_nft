@@ -21,20 +21,28 @@
 }
 
 .homeBtn{
-    background: #2081E2;
+    background: #FF6363;
     border-radius: 10px;
     padding: 10px;
     color:white;
     margin-left: 30px;
+    
+}
+.homeBtn:hover{
+    color: white;
 }
 
 .homeBtnC{
     background:white;
     border-radius: 10px;
     padding: 10px;
-    color:#2081E2;
+    color:#FF6363;
     border-style: solid;
     border-width: 2px;
+}
+
+.homeBtnC:hover{
+    color: #FF6363;
 }
 
 .slick-slider{

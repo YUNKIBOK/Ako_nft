@@ -45,7 +45,7 @@
 }
 
 .buyBtn{
-  background-color: midnightblue;
+  background-color: #FF6363;
   padding: 10px 20px;
   border-radius: 10px;
   color: white;
@@ -57,8 +57,8 @@
   background:white;
   border-radius: 10px;
   padding: 10px;
-  color:midnightblue;
+  color:#FF6363;
   border-style: solid;
   border-width: 2px;
-  border-color: midnightblue;
+  border-color: #FF6363;
 }
