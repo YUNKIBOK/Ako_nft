@@ -46,7 +46,7 @@ class Detail extends Component {
 
                     {(this.props.owners[this.props.id] !== this.props.account) && <button className="likeBtn" onClick={() => {
                         this.plusLike(this.props.id + 1)
-                        window.location.replace("/Market")
+                        window.location.replace("/Market/OrderByLikes")
                     }
 
                     }>Like it!</button>}
